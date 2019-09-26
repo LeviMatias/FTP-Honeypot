@@ -5,9 +5,15 @@
 #ifndef TP3_CLIENT_CLIENT_H
 #define TP3_CLIENT_CLIENT_H
 
+#include <iostream>
+#include "client_server_proxy.h"
 
-class client_client {
+class Client {
+private:
+    ServerProxy server;
 
+public:
+    void start();
 };
 
 
