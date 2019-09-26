@@ -4,13 +4,13 @@
 
 #include "common_proxy.h"
 
-void Proxy::Talk(Message m) {
-    char c = m.is_last_messsage();
-    std::string msg = m.get_text() + c + LINE_JUMP;
+void Proxy::Send(Message m) {
+    char c = m.IsLastMesssage();
+    std::string msg = m.GetText() + LINE_JUMP;
     //send
 }
 
-Message Proxy::WaitForReply() {
+Message Proxy::GetReply() {
     return Message(false);
 }
 

@@ -1,6 +1,6 @@
 //
 // Created by Matias on 26/09/2019.
-//ergo
+// ergo
 
 #ifndef TP3_COMMON_PROXY_H
 #define TP3_COMMON_PROXY_H
@@ -8,10 +8,11 @@
 #include "common_message.h"
 
 class Proxy {
+public:
 
-    void Talk(Message m);
+    virtual void Send(Message m);
 
-    Message WaitForReply();
+    Message GetReply();
 
     void Disconnect();
 private:

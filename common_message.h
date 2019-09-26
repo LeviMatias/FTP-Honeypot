@@ -6,6 +6,8 @@
 #define TP3_COMMON_MESSAGE_H
 
 #define LINE_JUMP '\0'
+#define IS_LAST '1'
+#define ISNT_LAST '2'
 
 #include <string>
 
@@ -16,15 +18,17 @@ public:
 
     explicit Message(std::string msg, bool is_last);
 
-    std::string get_text();
+    std::string GetText();
 
-    void set_text(std::string txt);
+    void SetText(std::string txt);
 
-    bool is_last_messsage();
+    bool IsLastMesssage();
 
 private:
     std::string text;
-    bool is_last;
+    char is_last;
+
+    void SetIsLast(bool v);
 };
 
 
