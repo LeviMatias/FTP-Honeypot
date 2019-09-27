@@ -3,3 +3,7 @@
 //
 
 #include "client_client.h"
+
+void Client::Start() {
+
+}

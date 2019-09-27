@@ -13,7 +13,7 @@ private:
     ProxyServer server;
 
 public:
-    void start();
+    void Start();
 };
 
 

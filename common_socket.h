@@ -1,49 +1,66 @@
-#ifndef __SOCKET_H__
-#define __SOCKET_H__
-#define _POSIX_C_SOURCE 200112L
+//
+// Created by Matias on 27/09/2019.
+//
 
-#include <stdio.h>
+#ifndef TP3_COMMON_SOCKET_H
+#define TP3_COMMON_SOCKET_H
+
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
+//#include <sys/socket.h>
+//#include <netdb.h>
 #include <unistd.h>
-#include <stdbool.h>
-#include <arpa/inet.h>
+//#include <arpa/inet.h>
+#include <string>
+#include <vector>
+
+#include <winsock2.h>
+#include <ws2tcpip.h>
+
 
 #define NOT_CONNECTED -1
 
-typedef struct {
-	//file descriptor
-	int fd;
-	// file descriptor of the socket's channel ( == fd if client)
-	int connected;
-} socket_t;
+class Socket {
+    explicit Socket(std::string host, int service, bool is_passive);
 
-//initializes a to the addrinfo specified
-//POS: returns socket filedescriptor if succeeded -1 if not
-int socket_init(socket_t* self, struct addrinfo* ai);
+    void Connect();
 
-//attemps to connect to the addrinfo specified
-//POS: returns 0 if succeeded, otherwise returns -1 and closes the socket
-int socket_connect(socket_t* self, struct addrinfo* ai);
+    void Send(std::vector<char> msg);
 
-//POS: returns fd if successful, -1 if error
-int socket_bind_and_listen(socket_t* self, struct addrinfo* ai);
+    bool Receive1Byte(char* c);
 
-//POS returns connection fd and sets it to self->connected, -1 if not successful
-int socket_accept(socket_t* self, struct addrinfo* ai);
+    void BindAndListen();
 
-//Attemps to send #size bytes stored in buffer
-//POS returns bytes sent or -1 if not successful
-int socket_send(socket_t* self, const char* buffer, size_t size);
+    int Accept();
 
-//POS returns number of bytes received, 0 if connection is closed, -1 if error
-int socket_receive(socket_t* self, char* buffer, size_t size);
+    void Shutdown();
 
-//POS returns true if socket is connected to a channel
-bool socket_is_connected(socket_t* self);
+private:
+    int fd;
+    int connected;
 
-void socket_release(socket_t* self);
+    class AddrInfo{
+        public:
+        addrinfo hints;
+        addrinfo *result;
 
-#endif
+        explicit AddrInfo(bool is_passive){
+            memset(&(this->hints), 0, sizeof(this->hints));
+            this->hints.ai_family = AF_INET;       /* IPv4 */
+            this->hints.ai_socktype = SOCK_STREAM; /* TCP */
+            if (is_passive){
+                this->hints.ai_flags = AI_PASSIVE;
+            } else {
+                this->hints.ai_flags = 0;
+            }
+        }
 
+        ~AddrInfo(){
+            freeaddrinfo(this->result);
+        }
+    };
+
+    AddrInfo ai;
+};
+
+
+#endif //TP3_COMMON_SOCKET_H

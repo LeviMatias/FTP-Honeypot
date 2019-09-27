@@ -30,5 +30,5 @@ bool Message::IsLastMesssage() {
 }
 
 void Message::SetIsLast(bool v) {
-    this->is_last = (is_last) ? IS_LAST : ISNT_LAST;
+    this->is_last = (v) ? IS_LAST : ISNT_LAST;
 }
