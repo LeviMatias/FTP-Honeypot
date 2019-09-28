@@ -9,6 +9,7 @@
 #include <string>
 #include "common_message.h"
 #include "safe_set_template.h"
+#include "server_config.h"
 
 class Command {
 public:
