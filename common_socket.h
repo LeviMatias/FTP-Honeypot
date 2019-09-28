@@ -20,7 +20,13 @@
 #define NOT_CONNECTED -1
 
 class Socket {
+public:
+
+    Socket();
+
     explicit Socket(std::string host, int service, bool is_passive);
+
+    explicit Socket(int my_fd, int connected_fd);
 
     void Connect();
 
@@ -30,9 +36,13 @@ class Socket {
 
     void BindAndListen();
 
+    bool IsConnected();
+
     int Accept();
 
     void Shutdown();
+
+    ~Socket();
 
 private:
     int fd;

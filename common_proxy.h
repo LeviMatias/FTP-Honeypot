@@ -6,17 +6,27 @@
 #define TP3_COMMON_PROXY_H
 
 #include "common_message.h"
+#include "common_socket.h"
 
 class Proxy {
 public:
 
-    virtual void Send(Message m);
+    void Connect(std::string host, int port);
+
+    bool IsConnected();
+
+    void Send(Message m);
 
     Message GetReply();
 
     void Disconnect();
+
+protected:
+
+    Socket* GetSkt();
 private:
-    //socket
+
+    Socket skt;
 };
 
 

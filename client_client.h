@@ -7,13 +7,14 @@
 
 #include <iostream>
 #include "client_proxy_server.h"
+#include <string>
 
 class Client {
 private:
     ProxyServer server;
 
 public:
-    void Start();
+    void Start(std::string host, int port);
 };
 
 

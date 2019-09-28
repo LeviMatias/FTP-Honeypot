@@ -4,10 +4,4 @@
 
 #include "client_proxy_server.h"
 
-ProxyServer::ProxyServer(std::string host, int port) {
 
-}
-
-void ProxyServer::Connect() {
-
-}

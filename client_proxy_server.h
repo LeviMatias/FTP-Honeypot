@@ -8,17 +8,13 @@
 #include "common_message.h"
 #include <string>
 #include "common_proxy.h"
+#include "common_socket.h"
 
-class ProxyServer: Proxy{
+class ProxyServer: public Proxy{
 
 public:
 
-    explicit ProxyServer(std::string host, int port);
 
-    void Connect();
-
-private:
-    //socket
 };
 
 

@@ -8,6 +8,11 @@
 // -Replace MSG_NOSIGNAL & SHUTDOWN_RD WITH NETDB CONSTANTS
 // -throw exceptions instead of errors
 
+Socket::Socket() :ai(false) {
+    this->fd = 0;
+    this->connected = NOT_CONNECTED;
+}
+
 Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive) {
     this->fd = 0;
     this->connected = NOT_CONNECTED;
@@ -18,6 +23,11 @@ Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive) 
     if (s != 0) {
         printf("Throw Ex Error in getaddrinfo: %s\n", gai_strerror(s));
     }
+}
+
+Socket::Socket(int my_fd, int connected_fd) : ai(false){
+    this->fd = my_fd;
+    this->connected = connected_fd;
 }
 
 void Socket::Connect() {
@@ -50,6 +60,7 @@ void Socket::Shutdown() {
             close(this->connected);
         }
         close(this->fd);
+        this->fd = -1;
     }
 }
 
@@ -112,4 +123,12 @@ bool Socket::Receive1Byte(char* c){
         }
     }
     return (s!=-1);
+}
+
+bool Socket::IsConnected() {
+    return this->connected != NOT_CONNECTED;
+}
+
+Socket::~Socket() {
+    this->Shutdown();
 }
