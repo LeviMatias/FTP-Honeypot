@@ -17,11 +17,12 @@ Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive) 
     this->fd = 0;
     this->connected = NOT_CONNECTED;
 
-    int s = getaddrinfo(reinterpret_cast<const char *>(host[0]),\
+    ai.s = getaddrinfo(reinterpret_cast<const char *>(host[0]),\
                         reinterpret_cast<const char *>(service), \
-                        &(this->ai.hints), &this->ai.result);
-    if (s != 0) {
-        printf("Throw Ex Error in getaddrinfo: %s\n", gai_strerror(s));
+                        &(this->ai.hints),
+                        &this->ai.result);
+    if (ai.s != 0) {
+        throw std::runtime_error(&"getaddrinfo error:" [*gai_strerror(ai.s)]);
     }
 }
 
@@ -32,6 +33,7 @@ Socket::Socket(int my_fd, int connected_fd) : ai(false){
 
 void Socket::Connect() {
     int skt = 0;
+    if (ai.s != 0) return;
     for (auto ptr = ai.result; ptr != nullptr && skt == 0; ptr = ptr->ai_next) {
         skt = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
         if (skt == -1) {

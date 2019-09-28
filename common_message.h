@@ -10,6 +10,7 @@
 #define ISNT_LAST '2'
 
 #include <string>
+#include <iostream>
 
 class Message {
 public:
@@ -23,6 +24,9 @@ public:
     void SetText(std::string txt);
 
     bool IsLastMesssage();
+
+    friend std::ostream & operator << (std::ostream &out, const Message &m);
+
 
 private:
     std::string text;

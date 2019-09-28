@@ -12,7 +12,7 @@ Message::Message(bool is_last) {
 }
 
 Message::Message(std::string msg, bool is_last) {
-    this->text = msg;
+    this->text = std::move(msg);
     this->SetIsLast(is_last);
 }
 
@@ -31,4 +31,9 @@ bool Message::IsLastMesssage() {
 
 void Message::SetIsLast(bool v) {
     this->is_last = (v) ? IS_LAST : ISNT_LAST;
+}
+
+std::ostream &operator<<(std::ostream &out, const Message &m){
+    out << m.text << std::endl;
+    return out;
 }

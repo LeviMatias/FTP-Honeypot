@@ -30,37 +30,37 @@ private:
     std::set<T> set;
     std::mutex m;
     std::mutex m2;
-    bool being_written{};
-    bool being_read{};
-    std::condition_variable being_written_cv;
-    std::condition_variable being_read_cv;
+    bool locked_for_read{};
+    bool locked_for_write{};
+    std::condition_variable cv_unlock_read;
+    std::condition_variable cv_unlock_write;
 
     void LockSet();
 };
 
 template<class T>
 SafeSet<T>::SafeSet() {
-    this->being_written = false;
-    this->being_read = false;
+    this->locked_for_read = false;
+    this->locked_for_write = false;
 }
 
 
 template<class T>
 bool SafeSet<T>::Insert(T elem) {
     std::unique_lock<std::mutex> lock(this->m);
-    this->being_written = true;
+    this->locked_for_read = true;
 
     auto result = set.insert(elem);
 
-    this->being_written = false;
-    this->being_written_cv.notify_all();
+    this->locked_for_read = false;
+    this->cv_unlock_read.notify_all();
     return result.second;//return the result of the insertion
 }
 
 template<class T>
 bool SafeSet<T>::Erase(T elem) {
     std::unique_lock<std::mutex> lock(this->m);
-    this->being_written = true;
+    this->locked_for_read = true;
 
     auto it = set.find(elem);
     bool was_found = it != set.end();
@@ -68,15 +68,15 @@ bool SafeSet<T>::Erase(T elem) {
         set.erase(it);
     }
 
-    this->being_written = false;
-    this->being_written_cv.notify_all();
+    this->locked_for_read = false;
+    this->cv_unlock_read.notify_all();
     return was_found;
 }
 
 template<class T>
 std::vector<T> SafeSet<T>::GetAll() {
     std::vector<T> elems;
-    if (being_written){
+    if (locked_for_read){
         LockSet();
     }
     std::for_each(set.begin(),set.end(),[&](T elem){
@@ -87,7 +87,7 @@ std::vector<T> SafeSet<T>::GetAll() {
 
 template<class T>
 bool SafeSet<T>::Contains(T elem) {
-    if (being_written){
+    if (locked_for_read){
         LockSet();
     }
     auto it = this->set.find(elem);
@@ -97,8 +97,8 @@ bool SafeSet<T>::Contains(T elem) {
 template<class T>
 void SafeSet<T>::LockSet() {
     std::unique_lock<std::mutex> lock(this->m2);
-    while(this->being_written){
-        this->being_written_cv.wait(lock);
+    while(this->locked_for_read){
+        this->cv_unlock_read.wait(lock);
     }
 }
 

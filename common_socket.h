@@ -10,6 +10,7 @@
 //#include <netdb.h>
 #include <unistd.h>
 //#include <arpa/inet.h>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -52,6 +53,7 @@ private:
         public:
         addrinfo hints;
         addrinfo *result;
+        int s;
 
         explicit AddrInfo(bool is_passive){
             memset(&(this->hints), 0, sizeof(this->hints));
@@ -65,7 +67,9 @@ private:
         }
 
         ~AddrInfo(){
-            freeaddrinfo(this->result);
+            if (s == 0) {
+                freeaddrinfo(this->result);
+            }
         }
     };
 

@@ -5,9 +5,14 @@
 #ifndef TP3_SERVER_SERVER_H
 #define TP3_SERVER_SERVER_H
 
+#include "server_command_interpreter.h"
 
 class server_server {
+public:
+    void Serve();
 
+private:
+    CmdInterpreter interpreter;
 };
 
 
