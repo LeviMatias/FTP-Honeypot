@@ -13,11 +13,16 @@
 class CmdInterpreter{
 public:
 
-    void AddCommand(std::string key, Command* cmd);
+    CmdInterpreter() = default;
+
+    explicit CmdInterpreter(Config &configs);
+
+    void AddCommand(const std::string& key, Command* cmd);
 
     std::vector<Message> ExecuteCommand(const std::string s);
 
 private:
+    Config* configs{nullptr};
     std::map<std::string, Command*> cmds;
     SafeSet<std::string> dirs;
     //map <user,pass>

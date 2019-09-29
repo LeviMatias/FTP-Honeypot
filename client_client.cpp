@@ -6,7 +6,7 @@
 
 #include "server_command_interpreter.h"
 #include <algorithm>
-
+#include "server_server.h"
 
 void Client::Start(std::string host, int port) {
     try {
@@ -16,22 +16,18 @@ void Client::Start(std::string host, int port) {
     }
     bool msg_end = false;
     std::string line;
-    CmdInterpreter interpreter;
+
     try {
         while ( true || server.IsConnected()) {
             while (msg_end) {
                 Message msg = server.GetReply();
-                printf("print msg <<");
+                std::cout << msg;
                 msg_end = msg.IsLastMesssage();
             }
             getline(std::cin>> std::ws, line);
             Message msg = Message(line, true);
-            std::cout << msg;
             //server.Send(msg);
-            auto r = interpreter.ExecuteCommand(msg.GetText());
-            std::for_each(r.begin(), r.end(), [&](Message& m){
-                std::cout << m;
-            });
+
         }
     } catch(...) {
         return; // connection ended

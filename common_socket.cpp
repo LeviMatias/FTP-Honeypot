@@ -13,12 +13,12 @@ Socket::Socket() :ai(false) {
     this->connected = NOT_CONNECTED;
 }
 
-Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive) {
+Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive){
     this->fd = 0;
     this->connected = NOT_CONNECTED;
-
-    ai.s = getaddrinfo(reinterpret_cast<const char *>(host[0]),\
-                        reinterpret_cast<const char *>(service), \
+    std::string port = std::to_string(service);
+    ai.s = getaddrinfo(host.c_str(),\
+                        port.c_str(), \
                         &(this->ai.hints),
                         &this->ai.result);
     if (ai.s != 0) {
@@ -82,21 +82,23 @@ void Socket::Send(std::vector<char> msg) {
     }
 
     if (!is_the_socket_valid) {
-        printf("Error in connection: %s\n", strerror(errno));
+       throw std::runtime_error(&"send error:" [*strerror(errno)]);
     }
 }
 
 int Socket::Accept() {
-    int fd = accept(this->fd, nullptr, nullptr);
+    int fd = accept(this->fd, nullptr, nullptr); //todo pass additional O_NONBLOCK
     if (fd != -1){
         this->connected = fd;
     }
     return fd;
 }
-
+//todo change prints for throws
 void Socket::BindAndListen() {
     int s = -1;
     int val = 1; //configure socket to reuse address if TIME WAIT
+    unsigned long on = 1;
+    ioctlsocket(fd, FIONBIO, &on); //todo remove
     setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR,
                reinterpret_cast<const char *>(&val), sizeof(val));
 
@@ -119,7 +121,7 @@ bool Socket::Receive1Byte(char* c){
     while (r < 1 && s > 0 && this->connected != -1) {
         s = recv(this->connected, c, 1, 0);
         if (s == -1) { // there was an error
-            printf("Error: %s\n", strerror(errno));
+            throw std::runtime_error(&"recv error:" [*strerror(errno)]);
         } else {
             r += s;
         }

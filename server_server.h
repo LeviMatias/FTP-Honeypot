@@ -8,10 +8,11 @@
 #include <iostream>
 #include <fstream>
 #include "server_command_interpreter.h"
+#include "server_acceptor_thread.h"
 
-class server_server {
+class Server {
 public:
-    void Serve(const std::string &config);
+    void Serve(const int service, const std::string &config);
 
 private:
     CmdInterpreter interpreter;

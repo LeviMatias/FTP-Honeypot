@@ -5,7 +5,7 @@
 #ifndef TP3_COMMON_MESSAGE_H
 #define TP3_COMMON_MESSAGE_H
 
-#define LINE_JUMP '\0'
+#define LINE_JUMP '\n'
 #define IS_LAST '1'
 #define ISNT_LAST '2'
 

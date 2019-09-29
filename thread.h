@@ -7,18 +7,23 @@
 
 
 #include <thread>
+#include <atomic>
+#include "server_command_interpreter.h"
 
 class Thread {
 private:
     std::thread thread;
+    std::atomic_bool closed{false};
 
-    virtual void Start() = 0;
+    virtual void Start(CmdInterpreter &interpreter) = 0;
 
 public:
-    explicit Thread();
-
-    //runs the thread with the specified id
+    //runs the thread
     void Run();
+
+    virtual void Close();
+
+    bool IsClosed();
 
     //joins the thread
     void Join();

@@ -17,6 +17,10 @@ std::vector<Message> CmdInterpreter::ExecuteCommand(const std::string s){
     }
 }
 
-void CmdInterpreter::AddCommand(std::string key, Command *cmd) {
+void CmdInterpreter::AddCommand(const std::string& key, Command *cmd) {
     cmds[key] = cmd;
+}
+
+CmdInterpreter::CmdInterpreter(Config &cfgs) {
+    this->configs = &cfgs;
 }

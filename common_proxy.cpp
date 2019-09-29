@@ -15,7 +15,7 @@ bool Proxy::IsConnected() {
 
 void Proxy::Send(Message m) {
     char c = m.IsLastMesssage();
-    std::string msg = m.GetText() + LINE_JUMP;
+    std::string msg = c + m.GetText() + LINE_JUMP;
     //send
 }
 
@@ -24,9 +24,15 @@ Message Proxy::GetReply() {
 }
 
 void Proxy::Disconnect() {
-
+    this->skt.Shutdown();
 }
 
 Socket *Proxy::GetSkt() {
     return &this->skt;
 }
+
+Proxy::Proxy(int skt_fd, int connected_fd) {
+    this->skt = Socket(skt_fd, connected_fd);
+}
+
+Proxy::Proxy()= default;

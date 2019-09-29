@@ -4,16 +4,20 @@
 
 #include "thread.h"
 
-Thread::Thread(){
-
-}
-
 void Thread::Run() {
-    //this->thread = std::thread(&Thread::_Run, this, order, total_threads);
+    this->thread = std::thread(&Thread::Start, this);
 }
 
 void Thread::Join() {
     this->thread.join();
+}
+
+void Thread::Close() {
+    this->closed.store(true);
+}
+
+bool Thread::IsClosed() {
+    return this->closed.load();
 }
 
 
