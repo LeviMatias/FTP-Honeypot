@@ -3,10 +3,7 @@
 //
 
 #include "client_client.h"
-
 #include "server_command_interpreter.h"
-#include <algorithm>
-#include "server_server.h"
 
 void Client::Start(std::string host, int port) {
     try {
@@ -14,9 +11,9 @@ void Client::Start(std::string host, int port) {
     } catch(const std::runtime_error &e) {
        std::cout << e.what() << std::endl;
     }
+
     bool msg_end = false;
     std::string line;
-
     try {
         while (server.IsConnected()) {
             while (!msg_end) {
@@ -29,7 +26,8 @@ void Client::Start(std::string host, int port) {
             server.Send(msg);
             msg_end = false;
         }
-    } catch(...) {
+    } catch(std::runtime_error &e) {
+        std::cout << e.what() << std::endl;
         return;
     }
 }

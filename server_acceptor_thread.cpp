@@ -5,20 +5,38 @@
 #include "server_acceptor_thread.h"
 
 AcceptorThread::AcceptorThread(std::string host, int service) {
-    //this->skt = Socket(host, service, true);
+    this->skt = Socket(host, service, true);
 }
 
 void AcceptorThread::Start(CmdInterpreter *interpreter) {
-   // this->skt.BindAndListen();
-   while (!this->IsClosed()){
-     //   int peer = skt.Accept();
-     //   if (peer != -1){
-
-       // }
+    try {
+        this->skt.BindAndListen();
+        while (!this->IsClosed()) {
+            int peer = skt.Accept();
+            if (peer != -1) {
+                peers.emplace_back(peer);
+                peers.back().Run(interpreter);
+            }
+            auto i = peers.begin();
+            while(i != peers.end()){
+                if (i->IsClosed()) {
+                    i = peers.erase(i);
+                }
+            }
+        }
+        Close();
+    }catch(std::runtime_error &e){
+        std::cout<<e.what()<<std::endl;
+        Close();
     }
 }
 
 void AcceptorThread::Close(){
+    auto i = peers.begin();
+    while(i != peers.end()){
+        i->Close();
+        i->Join();
+    }
     skt.Shutdown();
     Thread::Close();
 }

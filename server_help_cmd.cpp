@@ -9,7 +9,7 @@ HelpCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
                  std::string args) {
 
     return Command::Execute(dirs, conf, user, \
-    "214 HELP SYST MKD PWD RMD LIST QUIT");
+    conf.Get("commands"));
 }
 
 std::unique_ptr<Command> HelpCmd::Get() {

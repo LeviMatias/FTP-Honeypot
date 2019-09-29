@@ -6,7 +6,7 @@
 #define TP3_SERVER_ACCEPTOR_THREAD_H
 
 #include <string>
-#include <vector>
+#include <list>
 #include "server_base_thread.h"
 #include "server_command_interpreter.h"
 #include "common_socket.h"
@@ -17,13 +17,13 @@ public:
 
     AcceptorThread(std::string host, int service);
 
-    void Close();
+    void Close() override;
 
 private:
     Socket skt;
-    std::vector<Peer> peers;
+    std::list<Peer> peers;
 
-    virtual void Start(CmdInterpreter *interpreter);
+    void Start(CmdInterpreter *interpreter) override;
 };
 
 

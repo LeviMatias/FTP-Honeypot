@@ -25,8 +25,8 @@ void Server::ReadConfig(const std::string& config_name){
 }
 
 void Server::Run(const int service){
-   // AcceptorThread acceptor("0",service);
-    //acceptor.Run(&interpreter);
+    AcceptorThread acceptor("0",service);
+    acceptor.Run(&interpreter);
 
     std::string line;
     UserProfile user;
@@ -36,9 +36,9 @@ void Server::Run(const int service){
             std::cout << m;
         });
     }
-    //acceptor.Close();
-    //acceptor.Join();
-    //printf("Server logout");
+    acceptor.Close();
+    acceptor.Join();
+    printf("Server logout");
 }
 
 void Server::Serve(const int service){
