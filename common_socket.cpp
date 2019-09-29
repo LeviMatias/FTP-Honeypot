@@ -73,7 +73,7 @@ void Socket::Send(std::vector<char> msg) {
     int s = 0;
     bool is_the_socket_valid = true;
     while (sent < msg.size() && is_the_socket_valid) {
-        int MSG_NOSIGNAL = 0;
+        int MSG_NOSIGNAL = 0;//todo remove
         s = send(this->connected, &msg[sent], msg.size() - sent, MSG_NOSIGNAL);
 
         if (s <= 0) {
@@ -116,19 +116,18 @@ void Socket::BindAndListen() {
 }
 
 bool Socket::Receive1Byte(char* c){
-    std::vector<char> msg;
     int s = 1;
     int r = 0;
 
     while (r < 1 && s > 0 && this->connected != -1) {
         s = recv(this->connected, c, 1, 0);
-        if (s == -1) { // there was an error
+        if (s <= 0) { // there was an error
             throw std::runtime_error((std::string)strerror(errno)+"rec error");
-        } else {
+        } else{
             r += s;
         }
     }
-    return (s!=-1);
+    return (s > 0);
 }
 
 bool Socket::IsConnected() {

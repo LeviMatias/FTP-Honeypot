@@ -11,14 +11,15 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 */
+
+#include <winsock2.h>
+#include <ws2tcpip.h>
+
 #include <unistd.h>
 #include <stdexcept>
 #include <cstring>
 #include <vector>
 #include <fcntl.h>
-
-#include <winsock2.h>
-#include <ws2tcpip.h>
 
 
 #define NOT_CONNECTED -1

@@ -15,12 +15,20 @@ bool Proxy::IsConnected() {
 
 void Proxy::Send(Message m) {
     char c = m.IsLastMesssage();
-    std::string msg = c + m.GetText() + LINE_JUMP;
-    //send
+    std::string msg = c + m.GetText() + LINE_FEED;
+    this->skt.Send(std::vector<char>(msg.begin(), msg.end()));
 }
 
 Message Proxy::GetReply() {
-    return Message(false);
+    char c;
+    this->skt.Receive1Byte(&c);
+    Message m(c);
+    std::string msg;
+    while (this->skt.Receive1Byte(&c) && c!=LINE_FEED){
+        msg += c;
+    }
+    m.SetText(msg);
+    return m;
 }
 
 void Proxy::Disconnect() {
@@ -35,4 +43,4 @@ Proxy::Proxy(int skt_fd, int connected_fd) {
     this->skt = Socket(skt_fd, connected_fd);
 }
 
-Proxy::Proxy()= default;
+Proxy::Proxy()=default;

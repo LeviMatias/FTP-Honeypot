@@ -9,11 +9,10 @@ std::vector<Message> CmdInterpreter::ExecuteCommand(UserProfile &user,\
     const auto cmd = s.substr(0, s.find(' '));
     std::vector<Message> msgs;
     try {
-        auto len = cmd.length() + 1;
         auto pCmd = cmds.at(cmd)();//returns smart pointer to command
         pCmd->AssertLogged(user);
-        msgs = pCmd->Execute(this->dirs, *configs, user,
-                             s.substr(len, s.size() - len));
+        msgs = pCmd->Execute(this->dirs, *configs, user,\
+                s.substr(cmd.length(), s.size() - cmd.length() - 1));
         user.LogLastCommand(cmd);
     } catch (NotLoggedException &e){
         msgs.clear();

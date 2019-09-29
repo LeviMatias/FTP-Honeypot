@@ -5,7 +5,7 @@
 #ifndef TP3_COMMON_MESSAGE_H
 #define TP3_COMMON_MESSAGE_H
 
-#define LINE_JUMP '\n'
+#define LINE_FEED '\n'
 #define IS_LAST '1'
 #define ISNT_LAST '2'
 
@@ -30,9 +30,7 @@ public:
 
 private:
     std::string text;
-    char is_last;
-
-    void SetIsLast(bool v);
+    bool is_last;
 };
 
 

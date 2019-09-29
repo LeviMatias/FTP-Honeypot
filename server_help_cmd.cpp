@@ -7,7 +7,6 @@
 std::vector<Message>
 HelpCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
                  std::string args) {
-    if (!user.IsLogged()) throw NotLoggedException();
 
     return Command::Execute(dirs, conf, user, \
     "214 HELP SYST MKD PWD RMD LIST QUIT");
