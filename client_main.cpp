@@ -3,9 +3,8 @@
 //
 
 #include "client_client.h"
-int main(int argc, char** argv)
+int main__(int argc, char** argv)
 {
-    std::cout<<"Hello, Server!"<<std::endl;
     try {
         Client client;
         client.Start(argv[1], std::stoi(argv[1], nullptr, 10));

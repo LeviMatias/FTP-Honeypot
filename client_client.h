@@ -6,14 +6,17 @@
 #define TP3_CLIENT_CLIENT_H
 
 #include <iostream>
-#include "client_proxy_server.h"
+#include "common_proxy.h"
 #include <string>
 
 class Client {
 private:
-    ProxyServer server;
+    Proxy server;
 
 public:
+
+    Client() : server(){};
+
     void Start(std::string host, int port);
 };
 

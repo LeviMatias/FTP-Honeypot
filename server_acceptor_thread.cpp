@@ -26,7 +26,7 @@ void AcceptorThread::Start(CmdInterpreter *interpreter) {
         }
         Close();
     }catch(std::runtime_error &e){
-        std::cout<<e.what()<<std::endl;
+        std::cerr<<e.what()<<std::endl;
         Close();
     }
 }

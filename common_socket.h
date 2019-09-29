@@ -20,6 +20,9 @@
 #include <vector>
 #include <fcntl.h>
 
+#define S1(x) #x
+#define S2(x) S1(x)
+#define LOCATION __FILE__ " : " S2(__LINE__)
 
 #define NOT_CONNECTED -1
 

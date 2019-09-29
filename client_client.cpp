@@ -5,7 +5,7 @@
 #include "client_client.h"
 #include "server_command_interpreter.h"
 
-void Client::Start(std::string host, int port) {
+void Client::Start(const std::string host,const int port) {
     try {
         this->server.Connect(host, port);
     } catch(const std::runtime_error &e) {
@@ -28,6 +28,5 @@ void Client::Start(std::string host, int port) {
         }
     } catch(std::runtime_error &e) {
         std::cout << e.what() << std::endl;
-        return;
     }
 }

@@ -45,6 +45,6 @@ void Server::Serve(const int service){
     try{
         Run(service);
     } catch (std::runtime_error &e){
-        std::cout <<"Run server error "<< e.what()<< std::endl;
+        std::cerr <<"Run server error "<< e.what()<< std::endl;
     }
 }

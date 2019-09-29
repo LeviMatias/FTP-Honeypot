@@ -22,8 +22,11 @@ Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive){
                         &(this->ai.hints),
                         &this->ai.result);
     if (ai.s != 0) {
-        throw std::runtime_error((std::string)gai_strerror(ai.s) + "get addrinfo error");
+        throw std::runtime_error((std::string)gai_strerror(ai.s)\
+        + "get addrinfo error" + LOCATION);
     }
+    auto ptr = ai.result;
+    this->fd = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
 }
 
 Socket::Socket(int my_fd, int connected_fd) : ai(false){
@@ -32,26 +35,22 @@ Socket::Socket(int my_fd, int connected_fd) : ai(false){
 }
 
 void Socket::Connect() {
-    int skt = 0;
+    int skt = this->fd;
     if (ai.s != 0) return;
     for (auto ptr = ai.result; ptr != nullptr && skt == 0; ptr = ptr->ai_next){
-        skt = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
-        if (skt == -1) {
-            throw std::runtime_error(\
-                    (std::string)strerror(errno) + " socket init error");
-        } else {
+        if (skt > 0) {
             this->fd = skt;
             int s = connect(this->fd, ptr->ai_addr, ptr->ai_addrlen);
-            if (s == -1) {
-                close(this->fd);
-                skt = 0;
-                throw std::runtime_error((std::string)strerror(errno)\
-                + "connection error");
-            } else {
+            if (s != -1) {
                 this->connected = this->fd;
+                return;
             }
         }
+        skt = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
     }
+    close(this->fd);
+    throw std::runtime_error((std::string)strerror(errno)\
+                + "could not connect" + LOCATION);
 }
 
 void Socket::Shutdown() {
@@ -84,7 +83,8 @@ void Socket::Send(std::vector<char> msg) {
     }
 
     if (!is_the_socket_valid) {
-        throw std::runtime_error((std::string)strerror(errno)+" send error");
+        throw std::runtime_error((std::string)strerror(errno)+\
+                                    " send error" + LOCATION);
     }
 }
 
@@ -95,23 +95,22 @@ int Socket::Accept() {
     }
     return peer_fd;
 }
-//todo change prints for throws
+
 void Socket::BindAndListen() {
     int s = -1;
     const int val = 1; //configure socket to reuse address if TIME WAIT
-    //unsigned long on = 1;
-    //ioctlsocket(fd, FIONBIO, &on); //todo remove
     setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR,
                reinterpret_cast<const char *>(&val), sizeof(val));
 
-    for (auto ptr = ai.result; ptr != nullptr && s == -1; ptr = ptr->ai_next) {
+    for (auto ptr = ai.result; ptr != nullptr && s == -1; ptr = ptr->ai_next){
         s = bind(this->fd, ptr->ai_addr, ptr->ai_addrlen);
     }
     if (s != -1){
         s = listen(this->fd, 10);
     }
     if (s == -1){
-        throw std::runtime_error((std::string)strerror(errno)+" bind error");
+        throw std::runtime_error((std::string)strerror(errno)+\
+                                " bind error" + LOCATION );
     }
 }
 
@@ -122,7 +121,8 @@ bool Socket::Receive1Byte(char* c){
     while (r < 1 && s > 0 && this->connected != -1) {
         s = recv(this->connected, c, 1, 0);
         if (s <= 0) { // there was an error
-            throw std::runtime_error((std::string)strerror(errno)+"rec error");
+            throw std::runtime_error((std::string)strerror(errno)+\
+            "rec error" + LOCATION);
         } else{
             r += s;
         }
