@@ -22,7 +22,7 @@ Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive){
                         &(this->ai.hints),
                         &this->ai.result);
     if (ai.s != 0) {
-        throw std::runtime_error(&"getaddrinfo error:" [*gai_strerror(ai.s)]);
+        throw std::runtime_error((std::string)gai_strerror(ai.s) + "get addrinfo error");
     }
 }
 
@@ -34,17 +34,19 @@ Socket::Socket(int my_fd, int connected_fd) : ai(false){
 void Socket::Connect() {
     int skt = 0;
     if (ai.s != 0) return;
-    for (auto ptr = ai.result; ptr != nullptr && skt == 0; ptr = ptr->ai_next) {
+    for (auto ptr = ai.result; ptr != nullptr && skt == 0; ptr = ptr->ai_next){
         skt = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
         if (skt == -1) {
-            printf("Error in socket init: %s\n", strerror(errno));
+            throw std::runtime_error(\
+                    (std::string)strerror(errno) + " socket init error");
         } else {
             this->fd = skt;
             int s = connect(this->fd, ptr->ai_addr, ptr->ai_addrlen);
             if (s == -1) {
-                printf("Error in connection: %s\n", strerror(errno));
                 close(this->fd);
                 skt = 0;
+                throw std::runtime_error((std::string)strerror(errno)\
+                + "connection error");
             } else {
                 this->connected = this->fd;
             }
@@ -67,7 +69,7 @@ void Socket::Shutdown() {
 }
 
 void Socket::Send(std::vector<char> msg) {
-    int sent = 0;
+    unsigned int sent = 0;
     int s = 0;
     bool is_the_socket_valid = true;
     while (sent < msg.size() && is_the_socket_valid) {
@@ -82,25 +84,25 @@ void Socket::Send(std::vector<char> msg) {
     }
 
     if (!is_the_socket_valid) {
-       throw std::runtime_error(&"send error:" [*strerror(errno)]);
+        throw std::runtime_error((std::string)strerror(errno)+" send error");
     }
 }
 
 int Socket::Accept() {
-    int fd = accept(this->fd, nullptr, nullptr); //todo pass additional O_NONBLOCK
-    if (fd != -1){
-        this->connected = fd;
+    int peer_fd = accept(this->fd, nullptr, nullptr); //todo pass additional O_NONBLOCK
+    if (peer_fd != -1){
+        this->connected = peer_fd;
     }
-    return fd;
+    return peer_fd;
 }
 //todo change prints for throws
 void Socket::BindAndListen() {
     int s = -1;
-    int val = 1; //configure socket to reuse address if TIME WAIT
-    unsigned long on = 1;
-    ioctlsocket(fd, FIONBIO, &on); //todo remove
+    const int val = 1; //configure socket to reuse address if TIME WAIT
+    //unsigned long on = 1;
+    //ioctlsocket(fd, FIONBIO, &on); //todo remove
     setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR,
-               reinterpret_cast<const char *>(&val), sizeof(val));
+               &val, sizeof(val));
 
     for (auto ptr = ai.result; ptr != nullptr && s == -1; ptr = ptr->ai_next) {
         s = bind(this->fd, ptr->ai_addr, ptr->ai_addrlen);
@@ -109,7 +111,7 @@ void Socket::BindAndListen() {
         s = listen(this->fd, 10);
     }
     if (s == -1){
-        printf("Error: %s\n", strerror(errno));
+        throw std::runtime_error((std::string)strerror(errno)+" bind error");
     }
 }
 
@@ -121,7 +123,7 @@ bool Socket::Receive1Byte(char* c){
     while (r < 1 && s > 0 && this->connected != -1) {
         s = recv(this->connected, c, 1, 0);
         if (s == -1) { // there was an error
-            throw std::runtime_error(&"recv error:" [*strerror(errno)]);
+            throw std::runtime_error((std::string)strerror(errno)+"rec error");
         } else {
             r += s;
         }

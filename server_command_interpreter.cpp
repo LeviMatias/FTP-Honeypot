@@ -11,7 +11,8 @@ std::vector<Message> CmdInterpreter::ExecuteCommand(UserProfile &user,\
     try{
         auto len = cmd.length() + 1;
         auto pCmd = cmds.at(cmd)();//returns smart pointer to command
-        msgs = pCmd->Execute(this->dirs, user,s.substr(len, s.size()-len));
+        msgs = pCmd->Execute(this->dirs, *configs, user,
+                             s.substr(len, s.size() - len));
         user.LogLastCommand(cmd);
     } catch(...) {
         msgs.clear();

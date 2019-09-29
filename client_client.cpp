@@ -18,18 +18,18 @@ void Client::Start(std::string host, int port) {
     std::string line;
 
     try {
-        while ( true || server.IsConnected()) {
-            while (msg_end) {
+        while (server.IsConnected()) {
+            while (!msg_end) {
                 Message msg = server.GetReply();
                 std::cout << msg;
                 msg_end = msg.IsLastMesssage();
             }
             getline(std::cin>> std::ws, line);
             Message msg = Message(line, true);
-            //server.Send(msg);
-
+            server.Send(msg);
+            msg_end = false;
         }
     } catch(...) {
-        return; // connection ended
+        return;
     }
 }

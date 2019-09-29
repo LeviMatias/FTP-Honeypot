@@ -10,7 +10,7 @@ AcceptorThread::AcceptorThread(std::string host, int service) {
 
 void AcceptorThread::Start(CmdInterpreter *interpreter) {
    // this->skt.BindAndListen();
-    while (!this->IsClosed()){
+   while (!this->IsClosed()){
      //   int peer = skt.Accept();
      //   if (peer != -1){
 

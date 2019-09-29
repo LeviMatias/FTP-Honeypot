@@ -24,7 +24,6 @@ void Server::ReadConfig(const std::string& config_name){
     file.close();
 }
 
-#include <algorithm>
 void Server::Run(const int service){
    // AcceptorThread acceptor("0",service);
     //acceptor.Run(&interpreter);
@@ -46,6 +45,6 @@ void Server::Serve(const int service){
     try{
         Run(service);
     } catch (std::runtime_error &e){
-        printf(&"Run server error "[*e.what()]);
+        std::cout <<"Run server error "<< e.what()<< std::endl;
     }
 }

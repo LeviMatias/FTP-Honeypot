@@ -16,6 +16,8 @@ public:
 
     explicit Peer(int skt_fd);
 
+    void Close() override;
+
 private:
     Proxy proxy_client;
     UserProfile profile;

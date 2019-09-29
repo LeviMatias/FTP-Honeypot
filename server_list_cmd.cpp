@@ -5,12 +5,12 @@
 #include "server_list_cmd.h"
 
 std::vector<Message>
-ListCmd::Execute(SafeSet<std::string> &set, UserProfile &user,
+ListCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
                  std::string args) {
     std::vector<Message>m;
     std::string hardcoded = "drwxrwxrwx 0 1000 1000 4096 Sep 24 12:34 ";
 
-    auto all = set.GetAll();
+    auto all = dirs.GetAll();
     std::for_each(all.begin(), all.end(), [&](std::string &s){
        m.emplace_back(hardcoded + s, s==all.back());//change
     });

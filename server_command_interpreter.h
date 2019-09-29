@@ -6,10 +6,10 @@
 #define TP3_SERVER_COMMAND_INTERPRETER_H
 
 #include <map>
-#include "server_command.h"
 #include "server_mkdir_cmd.h"
 #include "server_list_cmd.h"
 
+#define EXIT_CMD "QUIT"
 
 class CmdInterpreter{
 public:
@@ -26,7 +26,6 @@ private:
     Config* configs{nullptr};
     std::map<std::string, std::unique_ptr<Command> (*)()> cmds;
     SafeSet<std::string> dirs;
-    //map <user,pass>
 };
 
 

@@ -5,18 +5,17 @@
 #ifndef TP3_COMMON_SOCKET_H
 #define TP3_COMMON_SOCKET_H
 
+
 #include <sys/types.h>
-//#include <sys/socket.h>
-//#include <netdb.h>
+#include <sys/socket.h>
+#include <netdb.h>
 #include <unistd.h>
-//#include <arpa/inet.h>
+#include <arpa/inet.h>
 #include <stdexcept>
-#include <string>
+#include <cstring>
 #include <vector>
 #include <fcntl.h>
 
-#include <winsock2.h>
-#include <ws2tcpip.h>
 
 
 #define NOT_CONNECTED -1

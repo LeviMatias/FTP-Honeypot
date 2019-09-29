@@ -5,13 +5,13 @@
 #include "server_mkdir_cmd.h"
 
 std::vector<Message>
-MakeDirCmd::Execute(SafeSet<std::string> &set, UserProfile &user,
+MakeDirCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
                     std::string arg) {
     std::vector<Message> msgs;
-    if (set.Contains(arg)){
+    if (dirs.Contains(arg)){
         msgs.emplace_back(Message("550 <mkdFailed>",true));
     } else {
-        set.Insert(arg);
+        dirs.Insert(arg);
         std::string msg = "257 \""+arg+" <mkdSuccess>\"";
         msgs.emplace_back(Message(msg, true));
     }
