@@ -8,13 +8,17 @@ std::vector<Message> CmdInterpreter::ExecuteCommand(UserProfile &user,\
                                     const std::string s){
     const auto cmd = s.substr(0, s.find(' '));
     std::vector<Message> msgs;
-    try{
+    try {
         auto len = cmd.length() + 1;
         auto pCmd = cmds.at(cmd)();//returns smart pointer to command
+        pCmd->AssertLogged(user);
         msgs = pCmd->Execute(this->dirs, *configs, user,
                              s.substr(len, s.size() - len));
         user.LogLastCommand(cmd);
-    } catch(...) {
+    } catch (NotLoggedException &e){
+        msgs.clear();
+        msgs.emplace_back(GetFromConfig("clientNotLogged"),true);
+    } catch(std::out_of_range &e) {
         msgs.clear();
         msgs.emplace_back(GetFromConfig("unknownCommand"),true);
     }
@@ -30,6 +34,13 @@ std::string CmdInterpreter::GetFromConfig(const std::string s) {
 }
 
 CmdInterpreter::CmdInterpreter() {
+    cmds["USER"] = &UserCmd::Get;
+    cmds["PASS"] = &PassCmd::Get;
+    cmds["PWD"] = &PwdCmd::Get;
     cmds["MKD"] = &MakeDirCmd::Get;
+    cmds["RMD"] = &RemovDirCmd::Get;
+    cmds["SYST"] = &SystCmd::Get;
     cmds["LIST"] = &ListCmd::Get;
+    cmds["HELP"] = &HelpCmd::Get;
+    cmds["QUIT"] = &QuitCmd::Get;
 }

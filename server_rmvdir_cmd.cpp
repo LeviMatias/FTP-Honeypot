@@ -5,8 +5,8 @@
 #include "server_rmvdir_cmd.h"
 
 std::vector<Message>
-RemvDirCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
-                    std::string args) {
+RemovDirCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
+                     std::string args) {
     std::vector<Message> msgs;
     if (!dirs.Contains(args)){
         msgs.emplace_back("550 " + conf.Get("rmdFailed"),true);
@@ -18,6 +18,6 @@ RemvDirCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
     return msgs;
 }
 
-std::unique_ptr<Command> RemvDirCmd::Get() {
-    return std::unique_ptr<Command>(new RemvDirCmd);
+std::unique_ptr<Command> RemovDirCmd::Get() {
+    return std::unique_ptr<Command>(new RemovDirCmd);
 }

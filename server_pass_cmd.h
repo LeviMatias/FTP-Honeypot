@@ -10,9 +10,11 @@
 class PassCmd : public Command{
 public:
 
-    virtual std::vector<Message>
+    std::vector<Message>
     Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
-            std::string args);
+            std::string args) override;
+
+    void AssertLogged(UserProfile &user) override{};
 
     static std::unique_ptr<Command> Get();
 };

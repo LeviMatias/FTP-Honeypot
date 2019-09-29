@@ -7,12 +7,12 @@
 
 #include "server_command.h"
 
-class RemvDirCmd : public Command{
+class RemovDirCmd : public Command{
 public:
 
-    virtual std::vector<Message>
+    std::vector<Message>
     Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
-            std::string args);
+            std::string args) override;
 
     static std::unique_ptr<Command> Get();
 };

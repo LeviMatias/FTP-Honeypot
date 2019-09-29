@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <exception>
 #include "common_message.h"
 #include "safe_set_template.h"
 #include "server_config.h"
@@ -18,7 +19,13 @@ public:
     virtual std::vector<Message>
     Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
             std::string args);
+
+    virtual void AssertLogged(UserProfile &user);
 };
 
+class NotLoggedException : public std::exception{
+public:
+    NotLoggedException() : std::exception(){};
+};
 
 #endif //TP3_SERVER_COMMAND_H

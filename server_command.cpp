@@ -11,3 +11,7 @@ Command::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
     m.emplace_back(args,true);
     return m;
 }
+
+void Command::AssertLogged(UserProfile &user) {
+    if (!user.IsLogged()) throw NotLoggedException();
+}
