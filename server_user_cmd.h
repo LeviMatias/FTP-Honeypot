@@ -1,13 +1,13 @@
 //
-// Created by Matias on 28/09/2019.
+// Created by Matias on 29/09/2019.
 //
 
-#ifndef TP3_SERVER_MKDIR_CMD_H
-#define TP3_SERVER_MKDIR_CMD_H
+#ifndef TP3_SERVER_USER_CMD_H
+#define TP3_SERVER_USER_CMD_H
 
 #include "server_command.h"
 
-class MakeDirCmd : public Command{
+class UserCmd : public Command{
 public:
 
     virtual std::vector<Message>
@@ -18,4 +18,4 @@ public:
 };
 
 
-#endif //TP3_SERVER_MKDIR_CMD_H
+#endif //TP3_SERVER_USER_CMD_H

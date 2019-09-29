@@ -102,7 +102,7 @@ void Socket::BindAndListen() {
     //unsigned long on = 1;
     //ioctlsocket(fd, FIONBIO, &on); //todo remove
     setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR,
-               &val, sizeof(val));
+               reinterpret_cast<const char *>(&val), sizeof(val));
 
     for (auto ptr = ai.result; ptr != nullptr && s == -1; ptr = ptr->ai_next) {
         s = bind(this->fd, ptr->ai_addr, ptr->ai_addrlen);

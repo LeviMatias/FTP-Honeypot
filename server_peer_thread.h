@@ -7,7 +7,7 @@
 
 
 #include "common_proxy.h"
-#include "thread.h"
+#include "server_base_thread.h"
 #include "server_command_interpreter.h"
 #include "server_user_profile.h"
 

@@ -16,7 +16,7 @@ std::vector<Message> CmdInterpreter::ExecuteCommand(UserProfile &user,\
         user.LogLastCommand(cmd);
     } catch(...) {
         msgs.clear();
-        msgs.emplace_back(Message(GetFromConfig("unknownCommand"),true));
+        msgs.emplace_back(GetFromConfig("unknownCommand"),true);
     }
     return msgs;
 }

@@ -7,5 +7,7 @@
 std::vector<Message>
 Command::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
                  std::string args) {
-    return std::vector<Message>();
+    std::vector<Message>m;
+    m.emplace_back(args,true);
+    return m;
 }

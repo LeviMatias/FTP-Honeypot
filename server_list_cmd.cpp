@@ -11,9 +11,11 @@ ListCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
     std::string hardcoded = "drwxrwxrwx 0 1000 1000 4096 Sep 24 12:34 ";
 
     auto all = dirs.GetAll();
+    m.emplace_back("150" + conf.Get("listBegin"),false);
     std::for_each(all.begin(), all.end(), [&](std::string &s){
-       m.emplace_back(hardcoded + s, s==all.back());//change
+       m.emplace_back(hardcoded + s, false);//change
     });
+    m.emplace_back("226" + conf.Get("listEnd"),true);
     return m;
 }
 

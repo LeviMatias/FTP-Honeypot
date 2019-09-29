@@ -9,11 +9,11 @@ MakeDirCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
                     std::string arg) {
     std::vector<Message> msgs;
     if (dirs.Contains(arg)){
-        msgs.emplace_back(Message("550 <mkdFailed>",true));
+        msgs.emplace_back("550 " + conf.Get("mkdFailed"),true);
     } else {
         dirs.Insert(arg);
-        std::string msg = "257 \""+arg+" <mkdSuccess>\"";
-        msgs.emplace_back(Message(msg, true));
+        std::string msg = "257 \""+arg+"\" " + conf.Get("mkdSuccess");
+        msgs.emplace_back(msg, true);
     }
     return msgs;
 }

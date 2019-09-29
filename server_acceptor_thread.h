@@ -7,7 +7,7 @@
 
 #include <string>
 #include <vector>
-#include "thread.h"
+#include "server_base_thread.h"
 #include "server_command_interpreter.h"
 #include "common_socket.h"
 #include "server_peer_thread.h"
