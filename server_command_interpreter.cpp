@@ -4,23 +4,31 @@
 
 #include "server_command_interpreter.h"
 
-std::vector<Message> CmdInterpreter::ExecuteCommand(const std::string s){
+std::vector<Message> CmdInterpreter::ExecuteCommand(UserProfile &user,\
+                                    const std::string s){
     const auto cmd = s.substr(0, s.find(' '));
+    std::vector<Message> msgs;
     try{
         auto len = cmd.length() + 1;
-        return cmds.at(cmd)->Execute(this->dirs,\
-                s.substr(len, s.size()-len));
-    } catch(std::out_of_range &e) {
-        std::vector<Message> msgs; //TODO ADD INVALID_CMD_CMD
-        msgs.emplace_back(Message("INVALIDCOMMAND",true));
-        return msgs;
+        auto pCmd = cmds.at(cmd)();//returns smart pointer to command
+        msgs = pCmd->Execute(this->dirs, user,s.substr(len, s.size()-len));
+        user.LogLastCommand(cmd);
+    } catch(...) {
+        msgs.clear();
+        msgs.emplace_back(Message(GetFromConfig("unknownCommand"),true));
     }
+    return msgs;
 }
 
-void CmdInterpreter::AddCommand(const std::string& key, Command *cmd) {
-    cmds[key] = cmd;
-}
-
-CmdInterpreter::CmdInterpreter(Config &cfgs) {
+void CmdInterpreter::LoadConfig(Config &cfgs) {
     this->configs = &cfgs;
+}
+
+std::string CmdInterpreter::GetFromConfig(const std::string s) {
+    return this->configs->Get(s);
+}
+
+CmdInterpreter::CmdInterpreter() {
+    cmds["MKD"] = &MakeDirCmd::Get;
+    cmds["LIST"] = &ListCmd::Get;
 }

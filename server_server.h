@@ -12,10 +12,17 @@
 
 class Server {
 public:
-    void Serve(const int service, const std::string &config);
+    explicit Server(const std::string &config);
+
+    void Serve(const int service);
 
 private:
     CmdInterpreter interpreter;
+    Config config;
+
+    void ReadConfig(const std::string &config_name);
+
+    void Run(const int service);
 };
 
 

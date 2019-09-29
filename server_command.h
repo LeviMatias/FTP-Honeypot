@@ -7,14 +7,16 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 #include "common_message.h"
 #include "safe_set_template.h"
 #include "server_config.h"
+#include "server_user_profile.h"
 
 class Command {
 public:
-    virtual std::vector<Message> Execute(SafeSet<std::string> &set,\
-                                        std::string args);
+    virtual std::vector<Message>
+    Execute(SafeSet<std::string> &set, UserProfile &user, std::string args);
 };
 
 

@@ -5,7 +5,7 @@
 int main()
 {
     std::cout<<"Hello, World!"<<std::endl;
-    Server server;
-    server.Serve(8021, "config.cfg");
+    Server server("config.cfg");
+    server.Serve(8021);
     return 0;
 }

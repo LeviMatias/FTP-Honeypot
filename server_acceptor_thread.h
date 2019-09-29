@@ -10,7 +10,7 @@
 #include "thread.h"
 #include "server_command_interpreter.h"
 #include "common_socket.h"
-#include "server_peer.h"
+#include "server_peer_thread.h"
 
 class AcceptorThread : public Thread {
 public:
@@ -23,7 +23,7 @@ private:
     Socket skt;
     std::vector<Peer> peers;
 
-    virtual void Start(CmdInterpreter &interpreter);
+    virtual void Start(CmdInterpreter *interpreter);
 };
 
 

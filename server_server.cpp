@@ -4,8 +4,13 @@
 
 #include "server_server.h"
 
-Config MakeConfig(const std::string& config_name){
-    Config c;
+Server::Server(const std::string &config_path) {
+    this->ReadConfig(config_path);
+    interpreter.LoadConfig(this->config);
+}
+
+
+void Server::ReadConfig(const std::string& config_name){
     std::ifstream file;
     file.open(config_name, std::ios::in);
     if (!file.good()) throw std::runtime_error("error opening file");
@@ -14,24 +19,33 @@ Config MakeConfig(const std::string& config_name){
     while (getline(file, line) && !file.eof()){
         const auto conf = line.substr(0, line.find('='));
         auto l = conf.length() + 1;
-        c.Add(conf, line.substr(l, line.length() - l));
+        config.Add(conf, line.substr(l, line.length() - l));
     }
     file.close();
-    return c;
 }
 
-void Server::Serve(const int service, const std::string& config_name){
-    Config config = MakeConfig(config_name);
-    MakeDirCmd mkd = MakeDirCmd();
-    ListCmd list;//TODO READ CONFIG AND MAKE STATIC CMD EXEC (or not)
-    interpreter.AddCommand("MKD", &mkd);
-    interpreter.AddCommand("LIST", &list);
-    AcceptorThread acceptor("0",service);
-    acceptor.Run();
+#include <algorithm>
+void Server::Run(const int service){
+   // AcceptorThread acceptor("0",service);
+    //acceptor.Run(&interpreter);
 
     std::string line;
-    while (getline(std::cin>> std::ws, line) && line != "q");
-    acceptor.Close();
-    acceptor.Join();
-    printf("hey");
+    UserProfile user;
+    while (getline(std::cin>> std::ws, line) && line != "q"){
+        auto msgs = interpreter.ExecuteCommand(user, line);
+        for_each(msgs.begin(),msgs.end(),[&](Message &m){
+            std::cout << m;
+        });
+    }
+    //acceptor.Close();
+    //acceptor.Join();
+    //printf("Server logout");
+}
+
+void Server::Serve(const int service){
+    try{
+        Run(service);
+    } catch (std::runtime_error &e){
+        printf(&"Run server error "[*e.what()]);
+    }
 }

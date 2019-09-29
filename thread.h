@@ -15,11 +15,11 @@ private:
     std::thread thread;
     std::atomic_bool closed{false};
 
-    virtual void Start(CmdInterpreter &interpreter) = 0;
+    virtual void Start(CmdInterpreter *interpreter) = 0;
 
 public:
     //runs the thread
-    void Run();
+    void Run(CmdInterpreter *interpreter);
 
     virtual void Close();
 

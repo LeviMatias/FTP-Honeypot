@@ -4,7 +4,8 @@
 
 #include "server_command.h"
 
-std::vector<Message> Command::Execute(SafeSet<std::string> &set,\
-                                        std::string args) {
+std::vector<Message>
+Command::Execute(SafeSet<std::string> &set, UserProfile &user,
+                 std::string args) {
     return std::vector<Message>();
 }

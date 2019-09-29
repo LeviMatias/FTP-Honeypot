@@ -4,7 +4,9 @@
 
 #include "server_mkdir_cmd.h"
 
-std::vector<Message> MakeDirCmd::Execute(SafeSet<std::string> &set, std::string arg) {
+std::vector<Message>
+MakeDirCmd::Execute(SafeSet<std::string> &set, UserProfile &user,
+                    std::string arg) {
     std::vector<Message> msgs;
     if (set.Contains(arg)){
         msgs.emplace_back(Message("550 <mkdFailed>",true));
@@ -14,4 +16,8 @@ std::vector<Message> MakeDirCmd::Execute(SafeSet<std::string> &set, std::string 
         msgs.emplace_back(Message(msg, true));
     }
     return msgs;
+}
+
+std::unique_ptr<Command> MakeDirCmd::Get() {
+    return std::unique_ptr<Command>(new MakeDirCmd);
 }

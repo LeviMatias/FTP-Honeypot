@@ -10,20 +10,21 @@
 #include "server_mkdir_cmd.h"
 #include "server_list_cmd.h"
 
+
 class CmdInterpreter{
 public:
 
-    CmdInterpreter() = default;
+    CmdInterpreter();
 
-    explicit CmdInterpreter(Config &configs);
+    void LoadConfig(Config &configs);
 
-    void AddCommand(const std::string& key, Command* cmd);
+    std::vector<Message> ExecuteCommand(UserProfile &user, const std::string s);
 
-    std::vector<Message> ExecuteCommand(const std::string s);
+    std::string GetFromConfig(const std::string s);
 
 private:
     Config* configs{nullptr};
-    std::map<std::string, Command*> cmds;
+    std::map<std::string, std::unique_ptr<Command> (*)()> cmds;
     SafeSet<std::string> dirs;
     //map <user,pass>
 };

@@ -10,8 +10,11 @@
 
 class ListCmd : public Command {
 public:
-    virtual std::vector<Message> Execute(SafeSet<std::string> &set,\
-                                std::string args);
+
+    virtual std::vector<Message>
+    Execute(SafeSet<std::string> &set, UserProfile &user, std::string args);
+
+    static std::unique_ptr<Command> Get();
 };
 
 

@@ -4,8 +4,8 @@
 
 #include "thread.h"
 
-void Thread::Run() {
-    this->thread = std::thread(&Thread::Start, this);
+void Thread::Run(CmdInterpreter* interpreter) {
+    this->thread = std::thread(&Thread::Start, this, interpreter);
 }
 
 void Thread::Join() {
