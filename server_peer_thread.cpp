@@ -8,14 +8,14 @@ void Peer::Start(CmdInterpreter *interpreter) {
     std::vector<Message> msgs;
     try {
         proxy_client.Send(
-                Message(interpreter->GetFromConfig("newClient"), true));
+                Message("220 "+interpreter->GetFromConfig("newClient"), true));
 
         while (proxy_client.IsConnected() && !this->IsClosed()\
-                    && profile.IsConnected()){
+                    && profile.IsConnected()){//make sure the profile didnt quit
             Message m = proxy_client.GetReply();
-            msgs = interpreter->ExecuteCommand(profile, m.GetText());
+            msgs = interpreter->ExecuteCommand(profile, m.GetBody());
             for_each(msgs.begin(), msgs.end(), [&](Message &m){
-                if (proxy_client.IsConnected() && profile.IsConnected()){
+                if (proxy_client.IsConnected()){
                     proxy_client.Send(m);
                 }
             });
@@ -29,5 +29,4 @@ void Peer::Start(CmdInterpreter *interpreter) {
 void Peer::Close() {
     Thread::Close();
     this->proxy_client.Disconnect();
-    std::cout<<"me_be_close"<<std::endl;
 }

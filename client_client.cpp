@@ -23,6 +23,7 @@ void Client::Start(const std::string host,const int port){
             }
             if (server.Ping()){
                 getline(std::cin >> std::ws, line);
+                if (std::cin.eof()) server.Disconnect();
                 Message msg = Message(line, true);
                 server.Send(msg);
                 msg_end = false;

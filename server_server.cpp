@@ -14,7 +14,7 @@ void Server::ReadConfig(const std::string& config_name){
     std::ifstream file;
     file.open(config_name, std::ios::in);
     if (!file.good()) throw std::runtime_error("error opening file " +
-    (std::string)strerror(errno) + LOCATION);
+    (std::string)strerror(errno) + HERE);
 
     std::string line;
     while (getline(file, line) && !file.eof()){

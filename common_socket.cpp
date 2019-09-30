@@ -20,7 +20,7 @@ Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive){
                         &this->ai.result);
     if (ai.s != 0) {
         throw std::runtime_error((std::string)gai_strerror(ai.s)\
-        + "get addrinfo error" + LOCATION);
+        + "get addrinfo error" + HERE);
     }
 }
 
@@ -46,7 +46,7 @@ void Socket::Connect() {
     }
     close(this->fd);
     throw std::runtime_error((std::string)strerror(errno)\
-                + "could not connect" + LOCATION);
+                + "could not connect" + HERE);
 }
 
 bool Socket::Send(std::vector<char> msg) {
@@ -60,7 +60,7 @@ bool Socket::Send(std::vector<char> msg) {
     }
     if (s < 0) {
         throw std::runtime_error((std::string)strerror(errno)+\
-                                    " send error" + LOCATION);
+                                    " send error" + HERE);
     }
     return (msg.size()<=sent);
 }
@@ -86,7 +86,7 @@ void Socket::BindAndListen() {
     }
     if (s == -1){
         throw std::runtime_error((std::string)strerror(errno)+\
-                                " bind error " + LOCATION );
+                                " bind error " + HERE );
     }
 }
 
@@ -98,7 +98,7 @@ bool Socket::Receive1Byte(char* c){
         s = recv(this->connected, c, 1, 0);
         if (s<0){ // there was an error
             throw std::runtime_error((std::string)strerror(errno)+\
-            " recv error " + LOCATION);
+            " recv error " + HERE);
         } else{
             r += s;
         }

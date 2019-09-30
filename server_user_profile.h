@@ -10,6 +10,8 @@
 class UserProfile {
 public:
 
+    UserProfile();
+
     std::string GetUser();
 
     void SetUser(std::string user);

@@ -7,22 +7,24 @@
 #include <utility>
 
 Message::Message(bool is_last) {
-    this->text = "";
+    this->body = "";
     this->is_last = is_last;
+    this->close_connection = false;
 }
 
 Message::Message(std::string msg, bool is_last) {
-    this->text = std::move(msg);
+    this->body = std::move(msg);
     this->is_last = is_last;
+    this->close_connection = false;
 }
 
 
-std::string Message::GetText() {
-    return this->text;
+std::string Message::GetBody() {
+    return this->body;
 }
 
 void Message::SetText(std::string txt) {
-    this->text = std::move(txt);
+    this->body = std::move(txt);
 }
 
 bool Message::IsLastMesssage() {
@@ -30,10 +32,18 @@ bool Message::IsLastMesssage() {
 }
 
 std::ostream &operator<<(std::ostream &out, const Message &m){
-    out << m.text;
+    out << m.body;
     return out;
 }
 
 void Message::SetIsLast(bool s) {
     this->is_last = s;
+}
+
+void Message::SetConnectionClosed(bool v){
+    this->close_connection = v;
+}
+
+bool Message::IsConnectionClosed(){
+    return this->close_connection;
 }

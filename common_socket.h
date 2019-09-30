@@ -22,7 +22,7 @@
 
 #define S1(x) #x
 #define S2(x) S1(x)
-#define LOCATION __FILE__ " : " S2(__LINE__)
+#define HERE __FILE__ " : " S2(__LINE__)
 
 #define OFF -1
 
@@ -62,6 +62,7 @@ private:
         int s;
 
         explicit AddrInfo(bool is_passive){
+            s = OFF;
             memset(&(this->hints), 0, sizeof(this->hints));
             this->hints.ai_family = AF_INET;       /* IPv4 */
             this->hints.ai_socktype = SOCK_STREAM; /* TCP */

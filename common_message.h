@@ -17,7 +17,7 @@ public:
 
     explicit Message(std::string msg, bool is_last);
 
-    std::string GetText();
+    std::string GetBody();
 
     void SetText(std::string txt);
 
@@ -25,12 +25,16 @@ public:
 
     bool IsLastMesssage();
 
+    void SetConnectionClosed(bool v);
+
+    bool IsConnectionClosed();
+
     friend std::ostream & operator << (std::ostream &out, const Message &m);
 
-
 private:
-    std::string text;
+    std::string body;
     bool is_last;
+    bool close_connection;
 };
 
 

@@ -35,6 +35,8 @@ protected:
 private:
 
     Socket skt;
+
+    char RecvSettings(Message &m);
 };
 
 

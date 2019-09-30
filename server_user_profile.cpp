@@ -43,3 +43,8 @@ void UserProfile::Disconnect(){
 bool UserProfile::IsConnected(){
     return !this->disconnected;
 }
+
+UserProfile::UserProfile() {
+    this->disconnected = false;
+    this->is_logged = false;
+}

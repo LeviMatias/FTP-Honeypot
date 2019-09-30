@@ -9,7 +9,8 @@ QuitCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
                  std::string args) {
     std::vector<Message> msgs;
     user.Disconnect();
-    msgs.emplace_back(conf.Get("quitSuccess"), true);
+    msgs.emplace_back("221 "+conf.Get("quitSuccess"), true);
+    msgs.back().SetConnectionClosed(true);
     return msgs;
 }
 

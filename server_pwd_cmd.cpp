@@ -8,7 +8,7 @@ std::vector<Message>
 PwdCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
                 std::string args) {
     return Command::Execute(dirs, conf, user,\
-                            "257" + conf.Get("currentDirectoryMsg"));
+                            "257 " + conf.Get("currentDirectoryMsg"));
 }
 
 std::unique_ptr<Command> PwdCmd::Get() {

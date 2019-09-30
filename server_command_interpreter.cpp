@@ -17,10 +17,10 @@ std::vector<Message> CmdInterpreter::ExecuteCommand(UserProfile &user,\
         user.LogLastCommand(cmd);
     } catch (NotLoggedException &e){
         msgs.clear();
-        msgs.emplace_back(GetFromConfig("clientNotLogged"),true);
+        msgs.emplace_back("530 "+GetFromConfig("clientNotLogged"),true);
     } catch(std::out_of_range &e) {
         msgs.clear();
-        msgs.emplace_back(GetFromConfig("unknownCommand"),true);
+        msgs.emplace_back("530 "+GetFromConfig("unknownCommand"),true);
     }
     return msgs;
 }
