@@ -9,15 +9,15 @@ void Proxy::Connect(){
 }
 
 bool Proxy::IsConnected() {
-    return skt.IsConnected();
+    return this->skt.IsConnected();
 }
 
 bool Proxy::Send(Message m) {
     char c = m.IsLastMesssage();
     std::string msg = c + m.GetText() + LINE_FEED;
-    bool s = !this->skt.Send(std::vector<char>(msg.begin(), msg.end()));
-    if (s){
-        Disconnect();
+    bool s = this->skt.Send(std::vector<char>(msg.begin(), msg.end()));
+    if (!s){
+        this->Disconnect();
     }
     return s;
 }
@@ -41,9 +41,9 @@ Message Proxy::GetReply(){
             msg += c;
         }
         m.SetText(msg);
-        std::cout<<m<<std::endl;
         if (!r) this->Disconnect();
     } while (r && m.GetText().empty());//ignore pings
+
     return m;
 }
 

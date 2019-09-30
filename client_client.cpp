@@ -21,7 +21,7 @@ void Client::Start(const std::string host,const int port){
                 std::cout << msg << std::endl;
                 msg_end = msg.IsLastMesssage();
             }
-            if (server.IsConnected()){
+            if (server.Ping()){
                 getline(std::cin >> std::ws, line);
                 Message msg = Message(line, true);
                 server.Send(msg);

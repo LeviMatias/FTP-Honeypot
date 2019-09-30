@@ -107,21 +107,21 @@ bool Socket::Receive1Byte(char* c){
 }
 
 bool Socket::IsConnected() {
-    return this->connected != OFF;
+    return (this->connected != OFF) && (this->fd != OFF);
 }
 
 
 void Socket::Shutdown() {
-    if (this->fd != -1){
-        if (this->connected != -1 && shutdown(this->connected, SHUT_RDWR) == -1){
+    if (this->fd != OFF){
+        if (this->connected != OFF && shutdown(this->connected, SHUT_RDWR) == -1){
             printf("Closing skt error: %s\n", strerror(errno));
         }
-        if (this->connected != -1 && this->connected != this->fd){
+        if (this->connected != OFF && this->connected != this->fd){
             close(this->connected);
-            this->connected = OFF;
         }
         close(this->fd);
-        this->fd = -1;
+        this->fd = OFF;
+        this->connected = OFF;
     }
 }
 
