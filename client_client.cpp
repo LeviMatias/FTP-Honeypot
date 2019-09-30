@@ -19,7 +19,7 @@ void Client::Start(const std::string host,const int port){
         while (server.IsConnected()) {
             while (!msg_end) {
                 Message msg = server.GetReply();
-                std::cout << msg;
+                std::cout << msg << std::endl;
                 msg_end = msg.IsLastMesssage();
             }
             getline(std::cin>> std::ws, line);

@@ -31,15 +31,11 @@ void Server::Run(const int service){
 
     std::string line;
     UserProfile user;
-    while (getline(std::cin>> std::ws, line) && line != "q"){
-        auto msgs = interpreter.ExecuteCommand(user, line);
-        for_each(msgs.begin(),msgs.end(),[&](Message &m){
-            std::cout << m;
-        });
-    }
+    std::cout << "q to terminate" << std::endl;
+    while (getline(std::cin>> std::ws, line) && line != "q");
     acceptor.Close();
     acceptor.Join();
-    printf("Server logout");
+    printf("Server shutdown");
 }
 
 void Server::Serve(const int service){

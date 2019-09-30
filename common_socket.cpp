@@ -89,7 +89,7 @@ void Socket::Send(std::vector<char> msg) {
 }
 
 int Socket::Accept() {
-    int peer_fd = accept(this->fd, nullptr, nullptr); //todo pass additional O_NONBLOCK
+    int peer_fd = accept4(this->fd, nullptr, nullptr,0|SOCK_NONBLOCK);
     if (peer_fd != -1){
         this->connected = peer_fd;
     }
@@ -101,12 +101,12 @@ void Socket::BindAndListen() {
     const int val = 1; //configure socket to reuse address if TIME WAIT
     auto ptr = ai.result;
     this->fd = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
+    fcntl(this->fd, F_SETFL, O_NONBLOCK);
     setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR,
                reinterpret_cast<const char *>(&val), sizeof(val));
 
     for (auto ptr = ai.result; ptr != nullptr && s == -1; ptr = ptr->ai_next){
         s = bind(this->fd, ptr->ai_addr, ptr->ai_addrlen);
-        std::cout<<strerror(errno);
     }
     if (s != -1){
         s = listen(this->fd, 10);

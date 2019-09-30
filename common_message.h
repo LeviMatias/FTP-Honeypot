@@ -6,8 +6,6 @@
 #define TP3_COMMON_MESSAGE_H
 
 #define LINE_FEED '\n'
-#define IS_LAST '1'
-#define ISNT_LAST '2'
 
 #include <string>
 #include <iostream>
