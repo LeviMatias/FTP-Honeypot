@@ -86,7 +86,7 @@ void Socket::BindAndListen() {
     }
     if (s == -1){
         throw std::runtime_error((std::string)strerror(errno)+\
-                                " bind error" + LOCATION );
+                                " bind error " + LOCATION );
     }
 }
 
@@ -98,7 +98,7 @@ bool Socket::Receive1Byte(char* c){
         s = recv(this->connected, c, 1, 0);
         if (s<0){ // there was an error
             throw std::runtime_error((std::string)strerror(errno)+\
-            "rec error" + LOCATION);
+            " recv error " + LOCATION);
         } else{
             r += s;
         }

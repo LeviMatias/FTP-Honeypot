@@ -15,16 +15,18 @@ void Client::Start(const std::string host,const int port){
     bool msg_end = false;
     std::string line;
     try {
-        while (server.IsConnected()) {
-            while (!msg_end) {
+        while (server.IsConnected()){
+            while (!msg_end && server.IsConnected()){
                 Message msg = server.GetReply();
                 std::cout << msg << std::endl;
                 msg_end = msg.IsLastMesssage();
             }
-            getline(std::cin>> std::ws, line);
-            Message msg = Message(line, true);
-            server.Send(msg);
-            msg_end = false;
+            if (server.IsConnected()){
+                getline(std::cin >> std::ws, line);
+                Message msg = Message(line, true);
+                server.Send(msg);
+                msg_end = false;
+            }
         }
     } catch(std::runtime_error &e) {
         std::cout << e.what() << std::endl;

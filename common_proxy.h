@@ -20,11 +20,13 @@ public:
 
     bool IsConnected();
 
-    void Send(Message m);
+    bool Send(Message m);
 
     Message GetReply();
 
     void Disconnect();
+
+    bool Ping();
 
 protected:
 

@@ -11,11 +11,11 @@ void Peer::Start(CmdInterpreter *interpreter) {
                 Message(interpreter->GetFromConfig("newClient"), true));
 
         while (proxy_client.IsConnected() && !this->IsClosed()\
-                    && profile.GetLastCommand() != EXIT_CMD){
+                    && profile.IsConnected()){
             Message m = proxy_client.GetReply();
             msgs = interpreter->ExecuteCommand(profile, m.GetText());
             for_each(msgs.begin(), msgs.end(), [&](Message &m){
-                if (proxy_client.IsConnected()) {
+                if (proxy_client.IsConnected() && profile.IsConnected()){
                     proxy_client.Send(m);
                 }
             });

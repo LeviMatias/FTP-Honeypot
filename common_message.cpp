@@ -33,3 +33,7 @@ std::ostream &operator<<(std::ostream &out, const Message &m){
     out << m.text;
     return out;
 }
+
+void Message::SetIsLast(bool s) {
+    this->is_last = s;
+}

@@ -14,7 +14,7 @@
 class Peer : public Thread {
 public:
 
-    Peer(int skt_fd) : proxy_client(skt_fd, skt_fd) {};
+    explicit Peer(int skt_fd) : proxy_client(skt_fd, skt_fd) {};
 
     void Close() override;
 
@@ -22,7 +22,7 @@ private:
     Proxy proxy_client;
     UserProfile profile;
 
-    virtual void Start(CmdInterpreter *interpreter);
+    void Start(CmdInterpreter *interpreter) override;
 };
 
 

@@ -21,6 +21,8 @@ public:
 
     void SetText(std::string txt);
 
+    void SetIsLast(bool s);
+
     bool IsLastMesssage();
 
     friend std::ostream & operator << (std::ostream &out, const Message &m);

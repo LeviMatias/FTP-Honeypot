@@ -8,6 +8,8 @@
 #include "server_command.h"
 
 class UserCmd : public Command{
+private:
+    UserCmd() = default;
 public:
 
     std::vector<Message>

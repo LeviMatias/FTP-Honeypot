@@ -8,6 +8,7 @@ std::vector<Message>
 QuitCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
                  std::string args) {
     std::vector<Message> msgs;
+    user.Disconnect();
     msgs.emplace_back(conf.Get("quitSuccess"), true);
     return msgs;
 }

@@ -2,6 +2,7 @@
 // Created by Matias on 28/09/2019.
 //
 
+#include <iostream>
 #include "server_user_profile.h"
 
 std::string UserProfile::GetUser() {
@@ -32,4 +33,13 @@ void UserProfile::ResetProfile() {
     this->last_cmd_key = "";
     this->user = "";
     this->is_logged = false;
+    this->disconnected = false;
+}
+
+void UserProfile::Disconnect(){
+    this->disconnected = true;
+}
+
+bool UserProfile::IsConnected(){
+    return !this->disconnected;
 }

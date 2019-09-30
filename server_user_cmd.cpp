@@ -11,8 +11,7 @@ UserCmd::Execute(SafeSet <std::string> &dirs, Config &conf, UserProfile &user,
     if (user.IsLogged()){
         msgs.emplace_back("100 Already logged",true);
     } else {
-        if (!user.IsLogged() && \
-                user.GetUser().empty() && args==conf.Get("user")) {
+        if (user.GetUser().empty() && args==conf.Get("user")) {
             user.SetUser(args);
         }
         msgs.emplace_back("331 "+conf.Get("passRequired"),true);

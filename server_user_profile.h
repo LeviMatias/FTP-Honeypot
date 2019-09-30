@@ -24,9 +24,14 @@ public:
 
     void ResetProfile();
 
+    void Disconnect();
+
+    bool IsConnected();
+
 private:
     std::string user;
-    bool is_logged{false};
+    bool is_logged;
+    bool disconnected;
     std::string last_cmd_key;
 };
 

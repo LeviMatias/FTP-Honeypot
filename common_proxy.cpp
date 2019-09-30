@@ -12,25 +12,38 @@ bool Proxy::IsConnected() {
     return skt.IsConnected();
 }
 
-void Proxy::Send(Message m) {
+bool Proxy::Send(Message m) {
     char c = m.IsLastMesssage();
     std::string msg = c + m.GetText() + LINE_FEED;
-    if (!this->skt.Send(std::vector<char>(msg.begin(), msg.end()))){
+    bool s = !this->skt.Send(std::vector<char>(msg.begin(), msg.end()));
+    if (s){
         Disconnect();
     }
+    return s;
 }
 
-Message Proxy::GetReply() {
-    char c = true;
-    bool r = this->skt.Receive1Byte(&c);
-    Message m(c);
-    std::string msg;
-    while (r && c!=LINE_FEED){
+bool Proxy::Ping(){
+    Message m("", true);
+    return this->Send(m);
+}
+
+Message Proxy::GetReply(){
+    Message m(true);
+    bool r;
+    do {
+        char c = true;
         r = this->skt.Receive1Byte(&c);
-        msg += c;
-    }
-    m.SetText(msg);
-    if (!r) this->Disconnect();
+        m.SetIsLast(c);
+        std::string msg;
+        for (r = this->skt.Receive1Byte(&c);
+             r && c != LINE_FEED; r = this->skt.Receive1Byte(&c)){
+            //recv 1, check & repeat while tracking r
+            msg += c;
+        }
+        m.SetText(msg);
+        std::cout<<m<<std::endl;
+        if (!r) this->Disconnect();
+    } while (r && m.GetText().empty());//ignore pings
     return m;
 }
 
