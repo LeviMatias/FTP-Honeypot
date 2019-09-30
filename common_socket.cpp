@@ -53,20 +53,6 @@ void Socket::Connect() {
                 + "could not connect" + LOCATION);
 }
 
-void Socket::Shutdown() {
-    if (this->fd != -1){
-        int SHUT_RDWR = 2;
-        if (this->connected != -1 && shutdown(this->connected, SHUT_RDWR) == -1){
-            printf("Closing connection error: %s\n", strerror(errno));
-        }
-        if (this->connected != -1 && this->connected != this->fd){
-            close(this->connected);
-        }
-        close(this->fd);
-        this->fd = -1;
-    }
-}
-
 void Socket::Send(std::vector<char> msg) {
     unsigned int sent = 0;
     int s = 0;
@@ -89,18 +75,14 @@ void Socket::Send(std::vector<char> msg) {
 }
 
 int Socket::Accept() {
-    int peer_fd = accept4(this->fd, nullptr, nullptr,0|SOCK_NONBLOCK);
-    if (peer_fd != -1){
-        this->connected = peer_fd;
-    }
+    int peer_fd = accept(this->fd, nullptr, nullptr);
     return peer_fd;
 }
 
 void Socket::BindAndListen() {
     int s = -1;
     const int val = 1; //configure socket to reuse address if TIME WAIT
-    auto ptr = ai.result;
-    this->fd = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
+    this->fd = socket(ai.result->ai_family, ai.result->ai_socktype, ai.result->ai_protocol);
     fcntl(this->fd, F_SETFL, O_NONBLOCK);
     setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR,
                reinterpret_cast<const char *>(&val), sizeof(val));
@@ -123,7 +105,7 @@ bool Socket::Receive1Byte(char* c){
 
     while (r < 1 && s > 0 && this->connected != -1) {
         s = recv(this->connected, c, 1, 0);
-        if (s <= 0) { // there was an error
+        if (s<0){ // there was an error
             throw std::runtime_error((std::string)strerror(errno)+\
             "rec error" + LOCATION);
         } else{
@@ -135,6 +117,21 @@ bool Socket::Receive1Byte(char* c){
 
 bool Socket::IsConnected() {
     return this->connected != NOT_CONNECTED;
+}
+
+
+void Socket::Shutdown() {
+    if (this->fd != -1){
+        if (this->connected != -1 && shutdown(this->connected, SHUT_RDWR) == -1){
+            printf("Closing connection error: %s\n", strerror(errno));
+        }
+        if (this->connected != -1 && this->connected != this->fd){
+            close(this->connected);
+            this->connected = -1;
+        }
+        close(this->fd);
+        this->fd = -1;
+    }
 }
 
 Socket::~Socket() {
