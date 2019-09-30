@@ -2,21 +2,17 @@
 // Created by Matias on 27/09/2019.
 //
 
-#include <iostream>
 #include "common_socket.h"
 
-//TODO
-// -Replace MSG_NOSIGNAL & SHUTDOWN_RD WITH NETDB CONSTANTS
-// -throw exceptions instead of errors
 
 Socket::Socket() :ai(false) {
     this->fd = 0;
-    this->connected = NOT_CONNECTED;
+    this->connected = OFF;
 }
 
 Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive){
     this->fd = 0;
-    this->connected = NOT_CONNECTED;
+    this->connected = OFF;
     std::string port = std::to_string(service);
     ai.s = getaddrinfo(host.c_str(),\
                         port.c_str(), \
@@ -53,25 +49,20 @@ void Socket::Connect() {
                 + "could not connect" + LOCATION);
 }
 
-void Socket::Send(std::vector<char> msg) {
+bool Socket::Send(std::vector<char> msg) {
     unsigned int sent = 0;
     int s = 0;
-    bool is_the_socket_valid = true;
-    while (sent < msg.size() && is_the_socket_valid) {
-        int MSG_NOSIGNAL = 0;//todo remove
+    while (sent < msg.size() && this->connected != OFF && this->fd != OFF) {
         s = send(this->connected, &msg[sent], msg.size() - sent, MSG_NOSIGNAL);
-
-        if (s <= 0) {
-            is_the_socket_valid = false;
-        } else {
+        if (s > 0){
             sent += s;
         }
     }
-
-    if (!is_the_socket_valid) {
+    if (s < 0) {
         throw std::runtime_error((std::string)strerror(errno)+\
                                     " send error" + LOCATION);
     }
+    return (msg.size()<=sent);
 }
 
 int Socket::Accept() {
@@ -116,18 +107,18 @@ bool Socket::Receive1Byte(char* c){
 }
 
 bool Socket::IsConnected() {
-    return this->connected != NOT_CONNECTED;
+    return this->connected != OFF;
 }
 
 
 void Socket::Shutdown() {
     if (this->fd != -1){
         if (this->connected != -1 && shutdown(this->connected, SHUT_RDWR) == -1){
-            printf("Closing connection error: %s\n", strerror(errno));
+            printf("Closing skt error: %s\n", strerror(errno));
         }
         if (this->connected != -1 && this->connected != this->fd){
             close(this->connected);
-            this->connected = -1;
+            this->connected = OFF;
         }
         close(this->fd);
         this->fd = -1;

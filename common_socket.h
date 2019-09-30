@@ -24,7 +24,7 @@
 #define S2(x) S1(x)
 #define LOCATION __FILE__ " : " S2(__LINE__)
 
-#define NOT_CONNECTED -1
+#define OFF -1
 
 class Socket {
 public:
@@ -37,7 +37,7 @@ public:
 
     void Connect();
 
-    void Send(std::vector<char> msg);
+    bool Send(std::vector<char> msg);
 
     bool Receive1Byte(char* c);
 

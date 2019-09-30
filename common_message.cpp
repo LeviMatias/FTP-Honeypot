@@ -30,6 +30,6 @@ bool Message::IsLastMesssage() {
 }
 
 std::ostream &operator<<(std::ostream &out, const Message &m){
-    out << m.text << std::endl;
+    out << m.text;
     return out;
 }

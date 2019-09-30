@@ -16,6 +16,7 @@ void AcceptorThread::Start(CmdInterpreter *interpreter) {
             auto i = peers.begin();
             while(i != peers.end()){
                 if (i->IsClosed()) {
+                    i->Join();
                     i = peers.erase(i);
                 }
             }

@@ -14,8 +14,10 @@ void Peer::Start(CmdInterpreter *interpreter) {
                     && profile.GetLastCommand() != EXIT_CMD){
             Message m = proxy_client.GetReply();
             msgs = interpreter->ExecuteCommand(profile, m.GetText());
-            for_each(msgs.begin(), msgs.end(), [&](Message &m) {
-                proxy_client.Send(m);
+            for_each(msgs.begin(), msgs.end(), [&](Message &m){
+                if (proxy_client.IsConnected()) {
+                    proxy_client.Send(m);
+                }
             });
         }
     } catch (std::runtime_error &e){
@@ -27,4 +29,5 @@ void Peer::Start(CmdInterpreter *interpreter) {
 void Peer::Close() {
     Thread::Close();
     this->proxy_client.Disconnect();
+    std::cout<<"me_be_close"<<std::endl;
 }

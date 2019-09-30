@@ -3,7 +3,6 @@
 //
 
 #include "client_client.h"
-#include "server_command_interpreter.h"
 
 void Client::Start(const std::string host,const int port){
     Proxy server(host, port);

@@ -8,7 +8,7 @@ std::vector<Message>
 SystCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
                  std::string args) {
     return Command::Execute(dirs, conf, user,\
-                            "215" + conf.Get("systemInfo"));
+                            "215 " + conf.Get("systemInfo"));
 }
 
 std::unique_ptr<Command> SystCmd::Get() {

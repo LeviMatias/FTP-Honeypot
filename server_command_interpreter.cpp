@@ -7,12 +7,13 @@
 std::vector<Message> CmdInterpreter::ExecuteCommand(UserProfile &user,\
                                     const std::string s){
     const auto cmd = s.substr(0, s.find(' '));
+    const std::string arg = (cmd==s) ? \
+                "" : s.substr(cmd.length()+1, s.size()-cmd.length()-1);
     std::vector<Message> msgs;
     try {
         auto pCmd = cmds.at(cmd)();//returns smart pointer to command
         pCmd->AssertLogged(user);
-        msgs = pCmd->Execute(this->dirs, *configs, user,\
-                s.substr(cmd.length(), s.size() - cmd.length() - 1));
+        msgs = pCmd->Execute(this->dirs, *configs, user, arg);
         user.LogLastCommand(cmd);
     } catch (NotLoggedException &e){
         msgs.clear();
