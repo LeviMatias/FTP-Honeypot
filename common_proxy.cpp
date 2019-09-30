@@ -4,8 +4,7 @@
 
 #include "common_proxy.h"
 
-void Proxy::Connect(std::string host, int port) {
-    this->skt = Socket(std::move(host), port, false);
+void Proxy::Connect(){
     this->skt.Connect();
 }
 
@@ -39,8 +38,4 @@ Socket *Proxy::GetSkt() {
     return &this->skt;
 }
 
-Proxy::Proxy(int skt_fd, int connected_fd) {
-    this->skt = Socket(skt_fd, connected_fd);
-}
 
-Proxy::Proxy()=default;

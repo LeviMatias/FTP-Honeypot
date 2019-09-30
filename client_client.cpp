@@ -5,9 +5,10 @@
 #include "client_client.h"
 #include "server_command_interpreter.h"
 
-void Client::Start(const std::string host,const int port) {
+void Client::Start(const std::string host,const int port){
+    Proxy server(host, port);
     try {
-        this->server.Connect(host, port);
+        server.Connect();
     } catch(const std::runtime_error &e) {
        std::cout << e.what() << std::endl;
     }

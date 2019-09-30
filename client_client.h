@@ -10,12 +10,7 @@
 #include <string>
 
 class Client {
-private:
-    Proxy server;
-
 public:
-
-    Client() : server(){};
 
     void Start(std::string host, int port);
 };

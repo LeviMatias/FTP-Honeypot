@@ -4,10 +4,6 @@
 
 #include "server_peer_thread.h"
 
-Peer::Peer(int skt_fd) {
-    this->proxy_client = Proxy(skt_fd, skt_fd);
-}
-
 void Peer::Start(CmdInterpreter *interpreter) {
     std::vector<Message> msgs;
     try {

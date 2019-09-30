@@ -2,6 +2,7 @@
 // Created by Matias on 27/09/2019.
 //
 
+#include <iostream>
 #include "common_socket.h"
 
 //TODO
@@ -25,8 +26,6 @@ Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive){
         throw std::runtime_error((std::string)gai_strerror(ai.s)\
         + "get addrinfo error" + LOCATION);
     }
-    auto ptr = ai.result;
-    this->fd = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
 }
 
 Socket::Socket(int my_fd, int connected_fd) : ai(false){
@@ -35,18 +34,19 @@ Socket::Socket(int my_fd, int connected_fd) : ai(false){
 }
 
 void Socket::Connect() {
-    int skt = this->fd;
+    int skt = 0;
     if (ai.s != 0) return;
     for (auto ptr = ai.result; ptr != nullptr && skt == 0; ptr = ptr->ai_next){
+        skt = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
         if (skt > 0) {
             this->fd = skt;
             int s = connect(this->fd, ptr->ai_addr, ptr->ai_addrlen);
+            skt = 0;
             if (s != -1) {
                 this->connected = this->fd;
                 return;
             }
         }
-        skt = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
     }
     close(this->fd);
     throw std::runtime_error((std::string)strerror(errno)\
@@ -99,11 +99,14 @@ int Socket::Accept() {
 void Socket::BindAndListen() {
     int s = -1;
     const int val = 1; //configure socket to reuse address if TIME WAIT
+    auto ptr = ai.result;
+    this->fd = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
     setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR,
                reinterpret_cast<const char *>(&val), sizeof(val));
 
     for (auto ptr = ai.result; ptr != nullptr && s == -1; ptr = ptr->ai_next){
         s = bind(this->fd, ptr->ai_addr, ptr->ai_addrlen);
+        std::cout<<strerror(errno);
     }
     if (s != -1){
         s = listen(this->fd, 10);

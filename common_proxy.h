@@ -12,11 +12,11 @@
 class Proxy {
 public:
 
-    Proxy();
+    explicit Proxy(int skt_fd, int connected_fd):skt(skt_fd, connected_fd){};
 
-    explicit Proxy(int skt_fd, int connected_fd);
+    explicit Proxy(std::string host, int port):skt(host, port, false){};
 
-    void Connect(std::string host, int port);
+    void Connect();
 
     bool IsConnected();
 
