@@ -3,7 +3,7 @@
 
 `/server <service/port> <path/to/config>`
 
-`/client <service/port> <service/port>`
+`/client <host (localhost)> <service/port>`
 
 Task: create a (lite) FTP Honeypot 
 
