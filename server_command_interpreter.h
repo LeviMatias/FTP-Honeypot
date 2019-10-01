@@ -6,15 +6,8 @@
 #define TP3_SERVER_COMMAND_INTERPRETER_H
 
 #include <map>
-#include "server_mkdir_cmd.h"
-#include "server_list_cmd.h"
-#include "server_user_cmd.h"
-#include "server_pass_cmd.h"
-#include "server_pwd_cmd.h"
-#include "server_rmvdir_cmd.h"
-#include "server_help_cmd.h"
-#include "server_quit_cmd.h"
-#include "server_syst_cmd.h"
+#include "server_commands.h"
+
 
 #define EXIT_CMD "QUIT"
 
