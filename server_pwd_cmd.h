@@ -8,6 +8,7 @@
 #include "server_command.h"
 
 class PwdCmd : public Command{
+	PwdCmd() = default;
 public:
 
     virtual std::vector<Message>

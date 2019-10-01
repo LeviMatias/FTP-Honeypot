@@ -4,12 +4,6 @@
 
 #include "common_socket.h"
 
-
-Socket::Socket() :ai(false) {
-    this->fd = 0;
-    this->connected = OFF;
-}
-
 Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive){
     this->fd = 0;
     this->connected = OFF;

@@ -9,6 +9,7 @@
 #include "server_command.h"
 
 class ListCmd : public Command {
+	ListCmd() = default;
 public:
 
     virtual std::vector<Message>

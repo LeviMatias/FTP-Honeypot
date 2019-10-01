@@ -18,11 +18,14 @@ private:
     virtual void Start(CmdInterpreter *interpreter) = 0;
 
 public:
+
     //runs the thread
     void Run(CmdInterpreter *interpreter);
 
+    //stops the thread excution and begins to shutdown
     virtual void Close();
 
+    //returns whether the thread is shut
     bool IsClosed();
 
     //joins the thread

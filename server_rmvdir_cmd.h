@@ -8,6 +8,7 @@
 #include "server_command.h"
 
 class RemovDirCmd : public Command{
+	RemovDirCmd() = default;
 public:
 
     std::vector<Message>

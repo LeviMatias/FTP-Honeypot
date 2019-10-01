@@ -17,7 +17,6 @@ public:
 
     AcceptorThread(std::string host, int service):skt(host, service, true){};
 
-
     void Close() override;
 
 private:

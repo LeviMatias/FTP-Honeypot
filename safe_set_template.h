@@ -15,12 +15,14 @@ template <class T>
 class SafeSet{
 public:
 SafeSet<T>();
-//SafeSet allows multiple threads reading but locks the set when
+//SafeSet allows reading from multiple threads but locks the set when
 //its being written to
+
 bool Insert(T elem);
 
 bool Erase(T elem);
 
+//POS returns a list containing all elements inside the set
 std::vector<T> GetAll();
 
 bool Contains(T elem);

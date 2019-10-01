@@ -12,8 +12,10 @@
 
 class Server {
 public:
-    explicit Server(const std::string &config);
+	//creates a server that loads config from passed path
+    explicit Server(const std::string &path);
 
+    //begins serving in specified port/service
     void Serve(const int service);
 
 private:

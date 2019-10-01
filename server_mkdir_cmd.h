@@ -8,6 +8,8 @@
 #include "server_command.h"
 
 class MakeDirCmd : public Command{
+	
+	MakeDirCmd() = default;
 public:
 
     virtual std::vector<Message>

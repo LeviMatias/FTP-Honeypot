@@ -9,6 +9,7 @@
 #include "server_command.h"
 
 class HelpCmd : public Command{
+	HelpCmd() = default;
 public:
 
     virtual std::vector<Message>

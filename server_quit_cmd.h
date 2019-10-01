@@ -9,6 +9,8 @@
 #include "server_command.h"
 
 class QuitCmd : public Command{
+	
+	QuitCmd() = default;
 public:
 
     virtual std::vector<Message>

@@ -12,20 +12,26 @@ public:
 
     UserProfile();
 
+    //returns set username or "" if no user has been set
     std::string GetUser();
 
     void SetUser(std::string user);
 
+    //sets user log status to true
     void LogUser();
 
     bool IsLogged();
 
+    //returns the last command the user successfully issued
     std::string GetLastCommand();
 
+    //stores k as last command issued
     void LogLastCommand(std::string k);
 
+    //resets profile to constructor values (unlogs and connects)
     void ResetProfile();
 
+    //disconnects the user
     void Disconnect();
 
     bool IsConnected();

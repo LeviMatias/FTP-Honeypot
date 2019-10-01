@@ -8,6 +8,8 @@
 #include "server_command.h"
 
 class PassCmd : public Command{
+	
+	PassCmd() = default;
 public:
 
     std::vector<Message>
