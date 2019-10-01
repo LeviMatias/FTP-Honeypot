@@ -19,8 +19,8 @@ protected:
 	//TRAIT
 	//All derived classes must implement a static method 
 	//Get that returns a smart pointer to a "new <derived class>"
-	
 	Command()=default;
+
 public:
     virtual std::vector<Message>
     Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,

@@ -10,6 +10,7 @@
 
 class SystCmd : public Command{
 	SystCmd() = default;
+
 public:
 
     virtual std::vector<Message>
