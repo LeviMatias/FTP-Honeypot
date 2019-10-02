@@ -5,7 +5,7 @@
 
 `/client <host (localhost)> <service/port>`
 
-Task: create a (lite) FTP (File Transer Protocol) system Honeypot 
+Task: create a (lite) FTP (File Transer Protocol) Service Honeypot 
 
 The honeypot in this case can be summarized as a "fake" server that interacts and answers the same way a real server would.
 The program is divided in server files that will be used to create the server application, client files for the client, and common for both.
