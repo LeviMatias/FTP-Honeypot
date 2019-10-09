@@ -26,8 +26,8 @@ SystCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
                             "215 " + conf.Get("systemInfo"));
 }
 
-std::unique_ptr<Command> SystCmd::Get() {
-    return std::unique_ptr<Command>(new SystCmd);
+std::shared_ptr<Command> SystCmd::Get() {
+    return std::make_shared<SystCmd>();
 }
 ///////////////////////// USER ////////////////////////////
 
@@ -46,8 +46,8 @@ UserCmd::Execute(SafeSet <std::string> &dirs, Config &conf, UserProfile &user,
     return msgs;
 }
 
-std::unique_ptr<Command> UserCmd::Get() {
-    return std::unique_ptr<Command>(new UserCmd);
+std::shared_ptr<Command> UserCmd::Get() {
+    return std::make_shared<UserCmd>();
 }
 //////////////////////// HELP /////////////////////////////
 
@@ -59,8 +59,8 @@ HelpCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
     "214 "+conf.Get("commands"));
 }
 
-std::unique_ptr<Command> HelpCmd::Get() {
-    return std::unique_ptr<Command>(new HelpCmd);
+std::shared_ptr<Command> HelpCmd::Get() {
+    return std::make_shared<HelpCmd>();
 }
 /////////////////////// QUIT ///////////////////////////////
 
@@ -74,8 +74,8 @@ QuitCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
     return msgs;
 }
 
-std::unique_ptr<Command> QuitCmd::Get() {
-    return std::unique_ptr<Command>(new QuitCmd);
+std::shared_ptr<Command> QuitCmd::Get() {
+    return std::make_shared<QuitCmd>();
 }
 //////////////////////// REMOV ///////////////////////////////
 
@@ -93,8 +93,8 @@ RemovDirCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user
     return msgs;
 }
 
-std::unique_ptr<Command> RemovDirCmd::Get() {
-    return std::unique_ptr<Command>(new RemovDirCmd);
+std::shared_ptr<Command> RemovDirCmd::Get() {
+    return std::make_shared<RemovDirCmd>();
 }
 /////////////////////// MAKE ///////////////////////////////
 
@@ -112,8 +112,8 @@ MakeDirCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
     return msgs;
 }
 
-std::unique_ptr<Command> MakeDirCmd::Get() {
-    return std::unique_ptr<Command>(new MakeDirCmd);
+std::shared_ptr<Command> MakeDirCmd::Get() {
+    return std::make_shared<MakeDirCmd>();
 }
 ////////////////////// PASS /////////////////////////////////
 
@@ -134,8 +134,8 @@ PassCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
     return msgs;
 }
 
-std::unique_ptr<Command> PassCmd::Get() {
-    return std::unique_ptr<Command>(new PassCmd);
+std::shared_ptr<Command> PassCmd::Get() {
+    return std::make_shared<PassCmd>();
 }
 /////////////////////// PWD ///////////////////////////////
 
@@ -146,8 +146,8 @@ PwdCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
                             "257 " + conf.Get("currentDirectoryMsg"));
 }
 
-std::unique_ptr<Command> PwdCmd::Get() {
-    return std::unique_ptr<Command>(new PwdCmd);
+std::shared_ptr<Command> PwdCmd::Get() {
+    return std::make_shared<PwdCmd>();
 }
 /////////////////////// LIST ///////////////////////////////
 
@@ -166,8 +166,8 @@ ListCmd::Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
     return m;
 }
 
-std::unique_ptr<Command> ListCmd::Get() {
-    return std::unique_ptr<Command>(new ListCmd());
+std::shared_ptr<Command> ListCmd::Get() {
+    return std::make_shared<ListCmd>();
 }
 
 

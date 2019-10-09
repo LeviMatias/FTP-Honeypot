@@ -27,11 +27,11 @@ public:
 
     //PRE Config must have been loaded
     //POS returns config string associated with string field
-    std::string GetFromConfig(const std::string s);
+    std::string GetFromConfig(const std::string &s);
 
 private:
     Config* configs{nullptr};
-    std::map<std::string, std::unique_ptr<Command> (*)()> cmds;
+    std::map<std::string, std::shared_ptr<Command> (*)()> cmds;
     SafeSet<std::string> dirs;
 };
 

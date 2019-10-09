@@ -52,8 +52,8 @@ public:
 
     static std::unique_ptr<Command> Get();
 
-    template <typename Args>
-    static std::unique_ptr<Command> Get(Args&& args);
+ //   template <typename Args>
+ //   static std::unique_ptr<Command> Get(Args&& args);
 };
 /////////////////////// SYST ////////////////////////////////
 

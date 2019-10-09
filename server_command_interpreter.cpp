@@ -11,7 +11,7 @@ std::vector<Message> CmdInterpreter::ExecuteCommand(UserProfile &user,\
                 "" : s.substr(cmd.length()+1, s.size()-cmd.length()-1);
     std::vector<Message> msgs;
     try {
-        auto pCmd = cmds.at(cmd)();//returns smart pointer to command
+        std::shared_ptr<Command> pCmd = cmds.at(cmd)();
         pCmd->AssertLogged(user);
         msgs = pCmd->Execute(this->dirs, *configs, user, arg);
         user.LogLastCommand(cmd);
@@ -29,7 +29,7 @@ void CmdInterpreter::LoadConfig(Config &cfgs) {
     this->configs = &cfgs;
 }
 
-std::string CmdInterpreter::GetFromConfig(const std::string s) {
+std::string CmdInterpreter::GetFromConfig(const std::string &s) {
     return this->configs->Get(s);
 }
 
