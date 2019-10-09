@@ -5,7 +5,7 @@
 #include "server_base_thread.h"
 
 void Thread::Run(CmdInterpreter &interpreter) {
-    this->thread = std::thread(&Thread::Start, this, interpreter);
+    this->thread = std::thread(&Thread::Start, this, std::ref(interpreter));
 }
 
 void Thread::Join() {
