@@ -23,7 +23,7 @@ private:
     Socket skt;
     std::list<Peer> peers;
 
-    void Start(CmdInterpreter *interpreter) override;
+    void Start(CmdInterpreter &interpreter) override;
 };
 
 

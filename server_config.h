@@ -12,11 +12,11 @@ class Config {
 public:
 
 	//sets the value to the field in config
-    void Add(const std::string& field, std::string value);
+    void Add(const std::string& field, const std::string &value);
 
     //returns the value in field in config
     //out of bounds exception if field not found
-    std::string Get(const std::string& field);
+    std::string Get(const std::string& field) const;
 
 private:
     std::map<std::string, std::string> m;

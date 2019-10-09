@@ -4,7 +4,7 @@
 
 #include "server_acceptor_thread.h"
 
-void AcceptorThread::Start(CmdInterpreter *interpreter) {
+void AcceptorThread::Start(CmdInterpreter &interpreter) {
     try {
         this->skt.BindAndListen();
         while (!this->IsClosed()) {

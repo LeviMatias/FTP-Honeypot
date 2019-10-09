@@ -4,16 +4,16 @@
 
 #include "server_peer_thread.h"
 
-void Peer::Start(CmdInterpreter *interpreter) {
+void Peer::Start(CmdInterpreter &interpreter) {
     std::vector<Message> msgs;
     try {
         proxy_client.Send(
-                Message("220 "+interpreter->GetFromConfig("newClient"), true));
+                Message("220 "+interpreter.GetFromConfig("newClient"), true));
 
         while (proxy_client.IsConnected() && !this->IsClosed()\
                     && profile.IsConnected()){//make sure the profile didnt quit
             Message m = proxy_client.GetReply();
-            msgs = interpreter->ExecuteCommand(profile, m.GetBody());
+            msgs = interpreter.ExecuteCommand(profile, m.GetBody());
             for_each(msgs.begin(), msgs.end(), [&](Message &m){
                 if (proxy_client.IsConnected()){
                     proxy_client.Send(m);

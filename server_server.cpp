@@ -27,7 +27,7 @@ void Server::ReadConfig(const std::string& config_name){
 
 void Server::Run(const int service){
     AcceptorThread acceptor("0",service);
-    acceptor.Run(&interpreter);
+    acceptor.Run(interpreter);
 
     std::string line;
     UserProfile user;

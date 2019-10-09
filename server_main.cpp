@@ -3,8 +3,7 @@
 //
 
 #include "server_server.h"
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv){
     std::cout<<"Hello, Server!"<<std::endl;
     try {
         Server server(argv[2]);

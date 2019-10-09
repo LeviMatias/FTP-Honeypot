@@ -4,7 +4,7 @@
 
 #include "server_base_thread.h"
 
-void Thread::Run(CmdInterpreter* interpreter) {
+void Thread::Run(CmdInterpreter &interpreter) {
     this->thread = std::thread(&Thread::Start, this, interpreter);
 }
 

@@ -22,7 +22,7 @@ private:
     Proxy proxy_client;
     UserProfile profile;
 
-    void Start(CmdInterpreter *interpreter) override;
+    void Start(CmdInterpreter &interpreter) override;
 };
 
 

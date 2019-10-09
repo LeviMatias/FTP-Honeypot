@@ -51,6 +51,9 @@ public:
     void AssertLogged(UserProfile &user) override{};
 
     static std::unique_ptr<Command> Get();
+
+    template <typename Args>
+    static std::unique_ptr<Command> Get(Args&& args);
 };
 /////////////////////// SYST ////////////////////////////////
 
