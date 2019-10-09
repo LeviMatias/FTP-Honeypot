@@ -65,4 +65,8 @@ char Proxy::RecvSettings(Message &m) {
     return c;
 }
 
+Proxy::Proxy(Socket new_skt) : skt(0) {
+    this->skt = new_skt
+}
+
 

@@ -8,9 +8,9 @@ void AcceptorThread::Start(CmdInterpreter &interpreter) {
     try {
         this->skt.BindAndListen();
         while (!this->IsClosed()) {
-            int peer = skt.Accept();
-            if (peer != -1) {
-                peers.emplace_back(peer);
+            Socket peer_skt = skt.Accept();
+            if (peer_skt.IsConnected()) {
+                peers.emplace_back(peer_skt);
                 peers.back().Run(interpreter);
             }
             auto i = peers.begin();

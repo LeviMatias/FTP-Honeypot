@@ -18,10 +18,16 @@ Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive){
     }
 }
 
-Socket::Socket(int my_fd, int connected_fd) : ai(false){
+Socket::Socket(int my_fd) : ai(false){
     this->fd = my_fd;
-    this->connected = connected_fd;
+    this->connected = my_fd;
 }
+
+Socket::Socket(const Socket &other) : ai(false) {
+    this->fd = other.fd;
+    this->connected = other.fd;
+}
+
 
 void Socket::Connect() {
     int skt = 0;
@@ -59,16 +65,15 @@ bool Socket::Send(std::vector<char> msg) {
     return (msg.size()<=sent);
 }
 
-int Socket::Accept() {
+Socket Socket::Accept() {
     int peer_fd = accept(this->fd, nullptr, nullptr);
-    return peer_fd;
+    return Socket(peer_fd);
 }
 
 void Socket::BindAndListen() {
     int s = -1;
     const int val = 1; //configure socket to reuse address if TIME WAIT
     this->fd = socket(ai.result->ai_family, ai.result->ai_socktype, ai.result->ai_protocol);
-    fcntl(this->fd, F_SETFL, O_NONBLOCK);
     setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR,
                reinterpret_cast<const char *>(&val), sizeof(val));
 

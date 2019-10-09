@@ -14,7 +14,7 @@
 class Peer : public Thread {
 public:
 	//Creates a new connected peer thread
-    explicit Peer(int skt_fd) : proxy_client(skt_fd, skt_fd) {};
+    explicit Peer(Socket skt) : proxy_client(skt) {};
 
     void Close() override;
 

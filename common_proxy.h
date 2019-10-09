@@ -13,7 +13,7 @@ class Proxy {
 public:
 
     //POS creates a connected proxy with the specified fd
-    explicit Proxy(int skt_fd, int connected_fd):skt(skt_fd, connected_fd){};
+    explicit Proxy(Socket skt);
 
     //POS creates an unconnected proxy to the specified address
     explicit Proxy(std::string host, int port):skt(host, port, false){};
@@ -44,11 +44,9 @@ public:
     bool Ping();
 
 protected:
-
     Socket* GetSkt();
 
 private:
-
     Socket skt;
 
     char RecvSettings(Message &m);

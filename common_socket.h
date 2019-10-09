@@ -33,9 +33,11 @@ public:
     explicit Socket(std::string host, int service, bool is_passive);
 
     //Creates a socket and sets the internal fd
-    // to my_fd, connected_fd is used to indicate
+    // to my_fd is used to indicate
     //the channel through which its going to communicate
-    explicit Socket(int my_fd, int connected_fd);
+    explicit Socket(int my_fd);
+
+    Socket(const Socket &other);
 
     //PRE socket must be created with Socket(3)
     //POS connects the thread, throws runtime exception if failed
@@ -52,7 +54,7 @@ public:
     bool Receive1Byte(char* c);
 
     //PRE socket must have been created with Socket(3) and passive
-    //POS Attemps to bind and listen to the host and service in a NON_BLOCK way
+    //POS Attemps to bind and listen to the host and service
     //throws runtime exception if failed
     void BindAndListen();
 
@@ -61,8 +63,8 @@ public:
 
     //PRE socket must have successfully called BindAndListen()
     //POS Accepts a connection, if successful returns valid fd
-    //otherwise returns -1 (the socket is nonblocking so -1 is common)
-    int Accept();
+    //otherwise returns -1
+    Socket Accept();
 
     //Closes the socket and its channel
     void Shutdown();
