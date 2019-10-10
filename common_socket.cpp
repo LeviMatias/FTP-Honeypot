@@ -61,8 +61,13 @@ bool Socket::Send(std::vector<char> msg) {
     return (msg.size()<=sent);
 }
 
+#include <iostream>
 int Socket::Accept() {
     int peer_fd = accept(this->fd, nullptr, nullptr);
+    if (peer_fd <= 0){
+        throw std::runtime_error((std::string)strerror(errno)+\
+                                " accept error " + HERE );
+    }
     return peer_fd;
 }
 
@@ -70,6 +75,7 @@ void Socket::BindAndListen() {
     int s = -1;
     const int val = 1; //configure socket to reuse address if TIME WAIT
     this->fd = socket(this->result->ai_family, this->result->ai_socktype, this->result->ai_protocol);
+    //fcntl(this->fd, F_SETFL, O_NONBLOCK);
     setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR,
                reinterpret_cast<const char *>(&val), sizeof(val));
 
@@ -83,6 +89,8 @@ void Socket::BindAndListen() {
         throw std::runtime_error((std::string)strerror(errno)+\
                                 " bind error " + HERE );
     }
+    this->connected = this->fd;
+    std::cout<<this->connected;
 }
 
 bool Socket::Receive1Byte(char* c){
@@ -109,8 +117,10 @@ bool Socket::IsConnected() {
 void Socket::Shutdown() {
     if (this->fd != OFF){
         if (this->connected != OFF && shutdown(this->connected, SHUT_RDWR) == -1){
-            printf("Closing skt error: %s\n", strerror(errno));
+            std::cout<<this->fd;
+            printf("Closing skt error: %s\n", ((std::string)strerror(errno) + HERE).data());
         }
+        std::cout<<this->fd;
         if (this->connected != OFF && this->connected != this->fd){
             close(this->connected);
         }

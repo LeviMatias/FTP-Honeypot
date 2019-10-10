@@ -9,7 +9,7 @@ void AcceptorThread::Start(CmdInterpreter *interpreter) {
         this->skt.BindAndListen();
         while (!this->IsClosed()) {
             int peer = skt.Accept();
-            if (peer != -1) {
+            if (peer > -1) {
                 peers.emplace_back(peer);
                 peers.back().Run(interpreter);
             }
@@ -18,10 +18,10 @@ void AcceptorThread::Start(CmdInterpreter *interpreter) {
                 if (i->IsClosed()) {
                     i->Join();
                     i = peers.erase(i);
-                }
+                } else i++;
             }
         }
-        Close();
+        //Close();
     }catch(std::runtime_error &e){
         std::cerr<<e.what()<<std::endl;
         Close();
@@ -29,11 +29,13 @@ void AcceptorThread::Start(CmdInterpreter *interpreter) {
 }
 
 void AcceptorThread::Close(){
+    if (this->IsClosed()) return;
+    Thread::Close();
+    skt.Shutdown();
     auto i = peers.begin();
-    while(i != peers.end()){
+    while(!peers.empty()){
         i->Close();
         i->Join();
+        i = peers.erase(i);
     }
-    skt.Shutdown();
-    Thread::Close();
 }
