@@ -13,18 +13,14 @@
 template <class T>
 class SafeSet{
 public:
-//SafeSet allows reading from multiple threads but locks the set when
-//its being written to
-
     bool Insert(T elem);
 
     bool Erase(T elem);
 
-//POS returns a list containing all elements inside the set
+    //POS returns a list containing all elements inside the set
     std::vector<T> GetAll();
 
     bool Contains(T elem);
-
 
 private:
     std::set<T> set;
@@ -34,12 +30,7 @@ private:
 template<class T>
 bool SafeSet<T>::Insert(T elem) {
     std::unique_lock<std::mutex> lock(this->m);
-    this->locked_for_read = true;
-
     auto result = set.insert(elem);
-
-    this->locked_for_read = false;
-    this->cv_unlock_read.notify_all();
     return result.second;//return the result of the insertion
 }
 
@@ -52,9 +43,6 @@ bool SafeSet<T>::Erase(T elem) {
     if (was_found){
         set.erase(it);
     }
-
-    this->locked_for_read = false;
-    this->cv_unlock_read.notify_all();
     return was_found;
 }
 

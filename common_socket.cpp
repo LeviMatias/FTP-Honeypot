@@ -4,29 +4,31 @@
 
 #include "common_socket.h"
 
-Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive){
+Socket::Socket(std::string host, int service, bool is_passive){
     this->fd = 0;
     this->connected = OFF;
+    InitAddrInfo(is_passive);
     std::string port = std::to_string(service);
-    ai.s = getaddrinfo(host.c_str(),\
+    this->valid_ai = getaddrinfo(host.c_str(),\
                         port.c_str(), \
-                        &(this->ai.hints),
-                        &this->ai.result);
-    if (ai.s != 0) {
-        throw std::runtime_error((std::string)gai_strerror(ai.s)\
+                        &(this->hints),
+                              &this->result);
+    if (this->valid_ai != 0) {
+        throw std::runtime_error((std::string)gai_strerror(this->valid_ai)\
         + "get addrinfo error" + HERE);
     }
 }
 
-Socket::Socket(int my_fd, int connected_fd) : ai(false){
+Socket::Socket(int my_fd, int connected_fd){
     this->fd = my_fd;
     this->connected = connected_fd;
+    InitAddrInfo(false);
 }
 
 void Socket::Connect() {
     int skt = 0;
-    if (ai.s != 0) return;
-    for (auto ptr = ai.result; ptr != nullptr && skt == 0; ptr = ptr->ai_next){
+    if (this->valid_ai != 0) return;
+    for (auto ptr = this->result; ptr != nullptr && skt == 0; ptr = ptr->ai_next){
         skt = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
         if (skt > 0) {
             this->fd = skt;
@@ -67,12 +69,11 @@ int Socket::Accept() {
 void Socket::BindAndListen() {
     int s = -1;
     const int val = 1; //configure socket to reuse address if TIME WAIT
-    this->fd = socket(ai.result->ai_family, ai.result->ai_socktype, ai.result->ai_protocol);
-    fcntl(this->fd, F_SETFL, O_NONBLOCK);
+    this->fd = socket(this->result->ai_family, this->result->ai_socktype, this->result->ai_protocol);
     setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR,
                reinterpret_cast<const char *>(&val), sizeof(val));
 
-    for (auto ptr = ai.result; ptr != nullptr && s == -1; ptr = ptr->ai_next){
+    for (auto ptr = this->result; ptr != nullptr && s == -1; ptr = ptr->ai_next){
         s = bind(this->fd, ptr->ai_addr, ptr->ai_addrlen);
     }
     if (s != -1){
@@ -121,4 +122,10 @@ void Socket::Shutdown() {
 
 Socket::~Socket() {
     this->Shutdown();
+}
+
+Socket::Socket(const Socket &other){
+    this->fd = other.fd;
+    this->connected = other.connected;
+    InitAddrInfo(false);
 }

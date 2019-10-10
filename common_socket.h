@@ -37,6 +37,8 @@ public:
     //the channel through which its going to communicate
     explicit Socket(int my_fd, int connected_fd);
 
+    Socket(const Socket &other);
+
     //PRE socket must be created with Socket(3)
     //POS connects the thread, throws runtime exception if failed
     void Connect();
@@ -72,33 +74,28 @@ public:
 private:
     int fd;
     int connected;
+    addrinfo hints;
+    addrinfo *result;
+    int valid_ai;
 
-    class AddrInfo{
-        public:
-        addrinfo hints;
-        addrinfo *result;
-        int s;
-
-        explicit AddrInfo(bool is_passive){
-            s = OFF;
-            memset(&(this->hints), 0, sizeof(this->hints));
-            this->hints.ai_family = AF_INET;       /* IPv4 */
-            this->hints.ai_socktype = SOCK_STREAM; /* TCP */
-            if (is_passive){
-                this->hints.ai_flags = AI_PASSIVE;
-            } else {
-                this->hints.ai_flags = 0;
-            }
+    void InitAddrInfo(bool is_passive){
+        valid_ai = OFF;
+        memset(&(this->hints), 0, sizeof(this->hints));
+        this->hints.ai_family = AF_INET;       /* IPv4 */
+        this->hints.ai_socktype = SOCK_STREAM; /* TCP */
+        if (is_passive){
+            this->hints.ai_flags = AI_PASSIVE;
+        } else {
+            this->hints.ai_flags = 0;
         }
+    }
 
-        ~AddrInfo(){
-            if (s == 0) {
-                freeaddrinfo(this->result);
-            }
+    void ReleaseAddrInfo(){
+        if (valid_ai == 0) {
+            freeaddrinfo(this->result);
         }
-    };
+    }
 
-    AddrInfo ai;
 };
 
 
