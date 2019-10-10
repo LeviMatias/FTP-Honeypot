@@ -64,10 +64,6 @@ bool Socket::Send(std::vector<char> msg) {
 #include <iostream>
 int Socket::Accept() {
     int peer_fd = accept(this->fd, nullptr, nullptr);
-    if (peer_fd <= 0){
-        throw std::runtime_error((std::string)strerror(errno)+\
-                                " accept error " + HERE );
-    }
     return peer_fd;
 }
 
@@ -90,7 +86,6 @@ void Socket::BindAndListen() {
                                 " bind error " + HERE );
     }
     this->connected = this->fd;
-    std::cout<<this->connected;
 }
 
 bool Socket::Receive1Byte(char* c){
@@ -116,11 +111,9 @@ bool Socket::IsConnected() {
 
 void Socket::Shutdown() {
     if (this->fd != OFF){
-        if (this->connected != OFF && shutdown(this->connected, SHUT_RDWR) == -1){
-            std::cout<<this->fd;
-            printf("Closing skt error: %s\n", ((std::string)strerror(errno) + HERE).data());
+        if (this->connected != OFF){
+            shutdown(this->connected, SHUT_RDWR);
         }
-        std::cout<<this->fd;
         if (this->connected != OFF && this->connected != this->fd){
             close(this->connected);
         }
@@ -132,6 +125,7 @@ void Socket::Shutdown() {
 
 Socket::~Socket() {
     this->Shutdown();
+    ReleaseAddrInfo();
 }
 
 Socket::Socket(const Socket &other){

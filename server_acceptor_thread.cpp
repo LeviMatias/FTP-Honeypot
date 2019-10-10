@@ -9,7 +9,7 @@ void AcceptorThread::Start(CmdInterpreter *interpreter) {
         this->skt.BindAndListen();
         while (!this->IsClosed()) {
             int peer = skt.Accept();
-            if (peer > -1) {
+            if (peer > 0) {
                 peers.emplace_back(peer);
                 peers.back().Run(interpreter);
             }

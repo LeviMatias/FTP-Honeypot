@@ -34,7 +34,7 @@ void Server::Run(const int service){
     std::cout << "q to terminate" << std::endl;
     while (getline(std::cin>> std::ws, line)  && line != "q" );
     acceptor.Close();
-    //acceptor.Join();
+    acceptor.Join();
     std::cout << "Server shutdown" << std::endl;
 }
 
