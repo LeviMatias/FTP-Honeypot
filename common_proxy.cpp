@@ -12,7 +12,7 @@ bool Proxy::IsConnected() {
     return this->skt.IsConnected();
 }
 
-bool Proxy::Send(Message m) {
+bool Proxy::Send(Message m){
     char c = m.IsLastMesssage();
     char c2 = m.IsConnectionClosed();
     std::string msg = c + (c2 + m.GetBody()) + LINE_FEED;

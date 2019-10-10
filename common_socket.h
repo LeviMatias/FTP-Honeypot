@@ -5,6 +5,10 @@
 #ifndef TP3_COMMON_SOCKET_H
 #define TP3_COMMON_SOCKET_H
 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <arpa/inet.h>
 
 #include <unistd.h>
 #include <stdexcept>
@@ -29,6 +33,9 @@ public:
     //the channel through which its going to communicate
     explicit Socket(int my_fd);
 
+    //POS copies the file descriptors of the sockets
+    //but does not copy the addrinfo
+    //(used for moving "connected" sockets)
     Socket(const Socket &other);
 
     //PRE socket must be created with Socket(3)
@@ -66,33 +73,15 @@ public:
 private:
     int fd;
     int connected;
+    addrinfo hints;
+    addrinfo *result;
+    int valid_addrinfo;
 
-    class AddrInfo{
-        public:
-        addrinfo hints;
-        addrinfo *result;
-        int s;
+    //Initializes the addrinfo used by the socket
+    void InitAddrInfo(bool is_passive);
 
-        explicit AddrInfo(bool is_passive){
-            s = OFF;
-            memset(&(this->hints), 0, sizeof(this->hints));
-            this->hints.ai_family = AF_INET;       /* IPv4 */
-            this->hints.ai_socktype = SOCK_STREAM; /* TCP */
-            if (is_passive){
-                this->hints.ai_flags = AI_PASSIVE;
-            } else {
-                this->hints.ai_flags = 0;
-            }
-        }
-
-        ~AddrInfo(){
-            if (s == 0) {
-                freeaddrinfo(this->result);
-            }
-        }
-    };
-
-    AddrInfo ai;
+    //releases addrinfo (does nothing if there is none)
+    void ReleaseAddrInfo();
 };
 
 

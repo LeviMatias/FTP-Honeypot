@@ -2,41 +2,41 @@
 // Created by Matias on 27/09/2019.
 //
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
+
 #include "common_socket.h"
 
-Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive){
+Socket::Socket(std::string host, int service, bool is_passive){
     this->fd = 0;
     this->connected = OFF;
+    InitAddrInfo(is_passive);
     std::string port = std::to_string(service);
-    ai.s = getaddrinfo(host.c_str(),\
+    this->valid_addrinfo = getaddrinfo(host.c_str(),\
                         port.c_str(), \
-                        &(this->ai.hints),
-                        &this->ai.result);
-    if (ai.s != 0) {
-        throw std::runtime_error((std::string)gai_strerror(ai.s)\
+                        &(this->hints),
+                           &this->result);
+    if (this->valid_addrinfo != 0){
+        throw std::runtime_error((std::string)gai_strerror(this->valid_addrinfo)\
         + "get addrinfo error" + HERE);
     }
 }
 
-Socket::Socket(int my_fd) : ai(false){
+Socket::Socket(int my_fd){
     this->fd = my_fd;
     this->connected = my_fd;
+    InitAddrInfo(false);
 }
 
-Socket::Socket(const Socket &other) : ai(false) {
+Socket::Socket(const Socket &other){
     this->fd = other.fd;
     this->connected = other.fd;
+    InitAddrInfo(false);
 }
 
 
 void Socket::Connect() {
     int skt = 0;
-    if (ai.s != 0) return;
-    for (auto ptr = ai.result; ptr != nullptr && skt == 0; ptr = ptr->ai_next){
+    if (this->valid_addrinfo != 0) return;
+    for (auto ptr = this->result; ptr != nullptr && skt == 0; ptr = ptr->ai_next){
         skt = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
         if (skt > 0) {
             this->fd = skt;
@@ -77,11 +77,11 @@ Socket Socket::Accept() {
 void Socket::BindAndListen() {
     int s = -1;
     const int val = 1; //configure socket to reuse address if TIME WAIT
-    this->fd = socket(ai.result->ai_family, ai.result->ai_socktype, ai.result->ai_protocol);
+    this->fd = socket(this->result->ai_family, this->result->ai_socktype, this->result->ai_protocol);
     setsockopt(this->fd, SOL_SOCKET, SO_REUSEADDR,
                reinterpret_cast<const char *>(&val), sizeof(val));
 
-    for (auto ptr = ai.result; ptr != nullptr && s == -1; ptr = ptr->ai_next){
+    for (auto ptr = this->result; ptr != nullptr && s == -1; ptr = ptr->ai_next){
         s = bind(this->fd, ptr->ai_addr, ptr->ai_addrlen);
     }
     if (s != -1){
@@ -126,8 +126,27 @@ void Socket::Shutdown() {
         this->fd = OFF;
         this->connected = OFF;
     }
+    ReleaseAddrInfo();
 }
 
 Socket::~Socket() {
     this->Shutdown();
+}
+
+void Socket::InitAddrInfo(bool is_passive) {
+    valid_addrinfo = OFF;
+    memset(&(this->hints), 0, sizeof(this->hints));
+    this->hints.ai_family = AF_INET;       /* IPv4 */
+    this->hints.ai_socktype = SOCK_STREAM; /* TCP */
+    if (is_passive){
+        this->hints.ai_flags = AI_PASSIVE;
+    } else {
+        this->hints.ai_flags = 0;
+    }
+}
+
+void Socket::ReleaseAddrInfo() {
+    if (valid_addrinfo == 0) {
+        freeaddrinfo(this->result);
+    }
 }
