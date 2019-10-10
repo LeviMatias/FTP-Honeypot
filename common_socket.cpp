@@ -133,3 +133,21 @@ Socket::Socket(const Socket &other){
     this->connected = other.connected;
     InitAddrInfo(false);
 }
+
+void Socket::InitAddrInfo(bool is_passive){
+    valid_ai = OFF;
+    memset(&(this->hints), 0, sizeof(this->hints));
+    this->hints.ai_family = AF_INET;       /* IPv4 */
+    this->hints.ai_socktype = SOCK_STREAM; /* TCP */
+    if (is_passive){
+        this->hints.ai_flags = AI_PASSIVE;
+    } else {
+        this->hints.ai_flags = 0;
+    }
+}
+
+void Socket::ReleaseAddrInfo() {
+    if (valid_ai == 0) {
+        freeaddrinfo(this->result);
+    }
+}
