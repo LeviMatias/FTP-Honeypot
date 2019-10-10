@@ -65,4 +65,8 @@ char Proxy::RecvSettings(Message &m) {
     return c;
 }
 
+Proxy::~Proxy() {
+    this->Disconnect();
+}
+
 

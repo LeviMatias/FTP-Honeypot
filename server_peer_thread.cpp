@@ -26,7 +26,7 @@ void Peer::Start(CmdInterpreter *interpreter) {
     this->Close();
 }
 
-void Peer::Close() {
+void Peer::Close(){
     Thread::Close();
     this->proxy_client.Disconnect();
 }

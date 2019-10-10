@@ -8,11 +8,9 @@ void AcceptorThread::Start(CmdInterpreter *interpreter) {
     try {
         this->skt.BindAndListen();
         while (!this->IsClosed()) {
-            int peer = skt.Accept();
-            if (peer > 0) {
-                peers.emplace_back(peer);
-                peers.back().Run(interpreter);
-            }
+            Socket peer = skt.Accept();
+            peers.emplace_back(peer);
+            peers.back().Run(interpreter);
             auto i = peers.begin();
             while(i != peers.end()){
                 if (i->IsClosed()) {
@@ -21,9 +19,8 @@ void AcceptorThread::Start(CmdInterpreter *interpreter) {
                 } else i++;
             }
         }
-        //Close();
     }catch(std::runtime_error &e){
-        std::cerr<<e.what()<<std::endl;
+        std::cerr<<"acceptor skt connection ended"<<std::endl;
         Close();
     }
 }

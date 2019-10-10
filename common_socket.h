@@ -32,11 +32,6 @@ public:
     //Creates a socket linked to the host and service
     explicit Socket(std::string host, int service, bool is_passive);
 
-    //Creates a socket and sets the internal fd
-    // to my_fd, connected_fd is used to indicate
-    //the channel through which its going to communicate
-    explicit Socket(int my_fd, int connected_fd);
-
     Socket(const Socket &other);
 
     //PRE socket must be created with Socket(3)
@@ -64,12 +59,12 @@ public:
     //PRE socket must have successfully called BindAndListen()
     //POS Accepts a connection, if successful returns valid fd
     //otherwise returns -1 (the socket is nonblocking so -1 is common)
-    int Accept();
+    Socket Accept();
 
     //Closes the socket and its channel
     void Shutdown();
 
-    ~Socket();
+    ~Socket() = default;
 
 private:
     int fd;
@@ -77,6 +72,11 @@ private:
     addrinfo hints;
     addrinfo *result;
     int valid_ai;
+
+    //Creates a socket and sets the internal fd
+    // to my_fd, connected_fd is used to indicate
+    //the channel through which its going to communicate
+    explicit Socket(int my_fd);
 
     void InitAddrInfo(bool is_passive);
 
