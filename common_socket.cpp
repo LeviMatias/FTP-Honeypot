@@ -2,6 +2,10 @@
 // Created by Matias on 27/09/2019.
 //
 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <arpa/inet.h>
 #include "common_socket.h"
 
 Socket::Socket(std::string host, int service, bool is_passive) : ai(is_passive){
@@ -49,11 +53,11 @@ void Socket::Connect() {
                 + "could not connect" + HERE);
 }
 
-bool Socket::Send(std::vector<char> msg) {
+bool Socket::Send(const std::vector<char> &msg) {
     unsigned int sent = 0;
     int s = 0;
     while (sent < msg.size() && this->connected != OFF && this->fd != OFF) {
-        s = send(this->connected, &msg[sent], msg.size() - sent, MSG_NOSIGNAL);
+        s = send(this->connected, &msg.data()[sent], msg.size() - sent, MSG_NOSIGNAL);
         if (s > 0){
             sent += s;
         }

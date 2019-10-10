@@ -5,15 +5,7 @@
 #ifndef TP3_COMMON_SOCKET_H
 #define TP3_COMMON_SOCKET_H
 
-#include <sys/types.h>
 
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-/*
-#include <winsock2.h>
-#include <ws2tcpip.h>
-*/
 #include <unistd.h>
 #include <stdexcept>
 #include <cstring>
@@ -46,7 +38,7 @@ public:
     //POS Sends msg through socket
     //Returns true if all message was sent
     //throws runtime exception if error
-    bool Send(std::vector<char> msg);
+    bool Send(const std::vector<char> &msg);
 
     //POS: Receives 1 byte from the channel
     //returns true if successful, false otherwise

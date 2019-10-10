@@ -40,9 +40,6 @@ public:
 ///////////////////// USER ///////////////////////////////
 
 class UserCmd : public Command{
-private:
-    UserCmd() = default;
-
 public:
     std::vector<Message>
     Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
@@ -50,40 +47,34 @@ public:
 
     void AssertLogged(UserProfile &user) override{};
 
-    static std::unique_ptr<Command> Get();
+    static std::shared_ptr<Command> Get();
 
  //   template <typename Args>
- //   static std::unique_ptr<Command> Get(Args&& args);
+ //   static std::shared_ptr<Command> Get(Args&& args);
 };
 /////////////////////// SYST ////////////////////////////////
 
 class SystCmd : public Command{
-    SystCmd() = default;
-
 public:
     virtual std::vector<Message>
     Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
             std::string args);
 
-    static std::unique_ptr<Command> Get();
+    static std::shared_ptr<Command> Get();
 };
 /////////////////////// REMOV ///////////////////////////////
 
 class RemovDirCmd : public Command{
-    RemovDirCmd() = default;
-
 public:
     std::vector<Message>
     Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
             std::string args) override;
 
-    static std::unique_ptr<Command> Get();
+    static std::shared_ptr<Command> Get();
 };
 ///////////////////////QUIT////////////////////////////
 
 class QuitCmd : public Command{
-    QuitCmd() = default;
-
 public:
     virtual std::vector<Message>
     Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
@@ -91,25 +82,22 @@ public:
 
     void AssertLogged(UserProfile &user) override{};
 
-    static std::unique_ptr<Command> Get();
+    static std::shared_ptr<Command> Get();
 };
 ///////////////////////PWD////////////////////////////
 
 class PwdCmd : public Command{
-    PwdCmd() = default;
 public:
 
     virtual std::vector<Message>
     Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
             std::string args);
 
-    static std::unique_ptr<Command> Get();
+    static std::shared_ptr<Command> Get();
 };
 //////////////////////PASS////////////////////////////////
 
 class PassCmd : public Command{
-    PassCmd() = default;
-
 public:
 
     std::vector<Message>
@@ -118,44 +106,40 @@ public:
 
     void AssertLogged(UserProfile &user) override{};
 
-    static std::unique_ptr<Command> Get();
+    static std::shared_ptr<Command> Get();
 };
 /////////////////////MAKE/////////////////////////////////
 
 class MakeDirCmd : public Command{
-    MakeDirCmd() = default;
-
 public:
 
     virtual std::vector<Message>
     Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
             std::string args);
 
-    static std::unique_ptr<Command> Get();
+    static std::shared_ptr<Command> Get();
 };
 /////////////////////// HELP ///////////////////////////////
 
 class HelpCmd : public Command{
-    HelpCmd() = default;
 public:
 
     virtual std::vector<Message>
     Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
             std::string args);
 
-    static std::unique_ptr<Command> Get();
+    static std::shared_ptr<Command> Get();
 };
 /////////////////////// LIST //////////////////////////////
 
 class ListCmd : public Command {
-    ListCmd() = default;
 public:
 
     virtual std::vector<Message>
     Execute(SafeSet<std::string> &dirs, Config &conf, UserProfile &user,
             std::string args);
 
-    static std::unique_ptr<Command> Get();
+    static std::shared_ptr<Command> Get();
 };
 
 

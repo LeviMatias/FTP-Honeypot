@@ -18,6 +18,8 @@ void AcceptorThread::Start(CmdInterpreter &interpreter) {
                 if (i->IsClosed()) {
                     i->Join();
                     i = peers.erase(i);
+                } else {
+                    i++;
                 }
             }
         }
@@ -33,6 +35,7 @@ void AcceptorThread::Close(){
     while(i != peers.end()){
         i->Close();
         i->Join();
+        i++;
     }
     skt.Shutdown();
     Thread::Close();
